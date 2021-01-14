@@ -1,0 +1,41 @@
+@charset "UTF-8";
+*{
+	margin: 0px;
+	padding:0px;
+}
+#f{
+	width: 800px;
+	margin: 0 auto;
+}
+tr{
+	height: 25px;
+}
+#logoarea{
+	width: 800px;
+}
+#logo{
+	margin: 0 auto;
+	width: 250px;
+}
+#logo img{
+	width: 100%;
+}
+#signform{
+	text-align:center;
+	margin: 0 auto;
+	width: 350px;
+}
+td:nth-child(2){
+	text-align: left;
+}
+#genderbox_1{
+	margin: 0 auto;
+	width:200px;
+	display: flex;
+	justify-content: space-around;	
+}
+input[type="submit"]{
+    width: 235px;
+    height: 50px;
+    background: green
+}

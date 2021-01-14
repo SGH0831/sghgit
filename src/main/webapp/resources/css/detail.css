@@ -1,0 +1,61 @@
+@charset "UTF-8";
+*{
+	margin: 0px;
+	padding: 0px;
+}
+a{
+	text-decoration: none;
+	color: black;
+}
+ul li{
+	list-style: none;
+}
+#nav .container{
+	display: flex;
+	justify-content: center;	
+}
+#searchB{
+	display:flex;
+	justify-content:space-between;
+	width: 300px;
+}
+#img{
+	width: 300px;
+	max-height: 300px;
+	border: 1px solid black;
+}
+#login_bottom{
+	display: flex;
+	justify-content: space-around;
+}
+
+#replybox{
+	width: 560px;
+	height: auto;
+}
+#replytext{
+	width: 500px;
+	height: 50px;
+	resize: none;
+}
+.modiarea{
+	width: 500px;
+	height: 50px;
+	resize: none;
+}
+#rebutton{
+	height: 50px;
+	border: none;
+}
+#inputbox{
+	display: flex;
+}
+.card{
+	cursor: pointer;
+}
+.card-img-top{
+	height: 200px;
+}
+li img{
+	width:30px;
+}

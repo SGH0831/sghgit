@@ -1,0 +1,13 @@
+/**
+ * 
+ */
+$(document).ready(function(){
+	$('h1').mouseenter(function(){
+		//$(this).attr("style","background:rgb(214,230,245)")
+		$(this).addClass('red')
+	})
+	$('h1').mouseleave(function(){	
+		//$(this).removeAttr("style")
+		$(this).removeClass('red')
+	})
+})

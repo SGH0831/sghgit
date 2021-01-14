@@ -1,0 +1,26 @@
+@charset "UTF-8";
+#b{
+	position:absolute;
+	top:0px;
+	left:0px;
+	z-index:2;
+	width: 200px;
+	height: 200px;
+	background:red;
+	transform-origin: bottom center;
+	float: left;
+}
+#img{
+	width: 200px;
+	height: 200px;
+}
+#a{
+	position:relative;
+	z-index:1;
+	width: 200px;
+	height: 200px;
+}
+#b:active {
+	transform:rotate(75deg) translate(100px);
+	transition: all ease 1s;
+}

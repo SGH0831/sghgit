@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>회원가입</title>
+<link rel="stylesheet" href="css/membership.css">
+<script type="text/javascript" src="js/membership.js"></script>
+</head>
+<body>
+<div id="membership">회 원 가 입</div>
+<div id="F">
+<div id="table">
+	<table >
+		<tr>
+			<td id="left">아이디</td>
+			<td><input type="text" id="id" placeholder="6자이상 12자 이내로 작성"><input type="button" value="확인" onclick="f1(this)"></td>
+		</tr>
+		<tr>
+			<td id="left">패스워드</td>
+			<td><input type="password"></td>
+		</tr>
+		<tr>
+			<td id="left">패스워드확인</td>
+			<td><input type="password"></td>
+		</tr>
+		<tr>
+			<td id="left">이름</td>
+			<td><input type="text"></td>
+		</tr>
+		<tr>
+			<td id="left">닉네임</td>
+			<td><input type="text"></td>
+		</tr>
+		<tr>
+			<td id="left">이메일</td>
+			<td><input type="text">@
+			<select>
+			<option>도메인입력/선택</option>
+			<option value="구글">gmail.com</option>
+			<option value="네이버">naver.com</option>
+			<option value="다음">hanmail.net</option>
+			</select></td>
+		</tr>
+		<tr>
+			<td id="left">이메일 수신</td>
+			<td><input type="radio" name=email>수신
+			<input type="radio" name=email>미수신
+			</td>
+		</tr>
+		<tr>
+			<td id="left">SMS수신</td>
+			<td>
+			<input type="radio" name=SMS>수신
+			<input type="radio" name=SMS>미수신</td>
+		</tr>
+		<tr>
+			<td id="left">연락처</td>
+			<td>
+			<select>
+			<option value="010">010</option>
+			<option value="011">011</option>
+			<option value="019">019</option>
+			</select>-
+			<input type="text" id="phone2" name="phone2" maxlength="4" onkeyup="f2(this,'phone3')">-<input type="text" id="phone3" name="phone3" maxlength="4">
+			</td>
+		</tr>
+		<tr>
+			<td id="left">가입경로</td>
+			<td>
+			<select>
+			<option>-선택해주세요</option>
+			<option value="검색">검색</option>
+			<option value="추천">추천</option>
+			<option value="기타">기타</option>
+			</select>
+			</td>
+		</tr>
+		<tr>
+			<td id="left">취미</td>
+			<td>
+			<input type="checkbox" name="hobby" value="Reading">독서
+			<input type="checkbox" name="hobby" value="fishing">낚시
+			<input type="checkbox" name="hobby" value="swimming">수영</td>
+		</tr>
+		<tr>
+			<td id="left">성별</td>
+			<td><input type="radio" name=gender>남자
+			<input type="radio" name=gender>여자</td>
+		</tr>
+		<tr>
+			<td id="left">프로필사진</td>
+			<td><input type="file" value="파일 선택"></td>
+		</tr>
+	
+	</table>
+</div>
+</div>
+<br>
+<div id="btn1">
+<input type="button" value="회원가입" >
+</div>
+
+</body>
+</html>

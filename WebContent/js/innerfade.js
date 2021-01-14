@@ -1,0 +1,12 @@
+/**
+ * 
+ */
+$(document).ready(function(){
+	$("#number").innerfade({
+		animationtype:"fade",
+		speed:"slow",
+		timeout:5000,
+		type:"sequence",
+		containerheight:'300px'
+	});
+})

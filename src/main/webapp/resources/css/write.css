@@ -1,0 +1,28 @@
+@charset "UTF-8";
+*{
+	margin: 0px;
+	padding:0px;
+}
+#material{
+	width: 450px;
+	height: 100px;
+	resize: none;
+}
+#content{
+	width: 450px;
+	min-height: 300px;
+	resize: none;
+}
+#formbox{
+	width: 800px;
+	margin: 0 auto;
+}
+#imgbox{
+	width: 300px;
+}
+#imgbox img{
+	width: 100%;
+}
+#contentbox{
+	display: flex;
+}

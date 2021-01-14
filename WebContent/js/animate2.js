@@ -1,0 +1,14 @@
+/**
+ * 
+ */
+$(document).ready(function(){
+	$('div').on('click',function(){
+	//alert($(this).css('width'))
+		$(this).animate({
+			//width:parseInt($(this).css("width"))
+			//width:$(this).width();
+			width:"+=50",
+			height:"+=50"
+		},'slow')
+	})
+})

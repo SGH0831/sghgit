@@ -1,0 +1,41 @@
+@charset "UTF-8";
+*{
+	margin: 0px;
+	padding:0px;
+}
+#f{
+	width: 800px;
+	margin: 0 auto;
+}
+tr{
+	height: 25px;
+}
+#logoarea{
+	width: 800px;
+}
+#logo{
+	margin: 0 auto;
+	width: 250px;
+}
+#logo img{
+	width: 100%;
+}
+#search{
+	text-align:center;
+	margin: 0 auto;
+	width: 350px;
+}
+#resultbox{
+	width: 350px;
+	margin: 5px auto;
+	text-align:center;
+}
+td:nth-child(2){
+	text-align: left;
+}
+
+input[type="submit"]{
+	width: 235px;
+    height: 50px;
+	background: green;
+}

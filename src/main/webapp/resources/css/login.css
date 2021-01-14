@@ -1,0 +1,52 @@
+@charset "UTF-8";
+*{
+	margin: 0px;
+	padding: 0px;
+}
+#f{
+	width: 800px;
+	margin: 0 auto;
+}
+#logoarea{
+	width: 800px;
+}
+#logo{
+	margin: 0 auto;
+	width: 250px;
+}
+#logo img{
+	width: 100%;
+}
+#bottomarea{
+}
+#loginbox{
+	width: 600px;
+	margin: 0 auto;
+}
+#logintool{
+	width:  224px;
+	margin: 0 auto;
+}
+#textarea{
+	text-align:left;
+	width:  235px;
+	}
+#loginarea input[type="submit"]{
+	width: 235px;
+    height: 50px;
+	background: green;
+}
+#memberarea{
+	text-align: center;
+}
+#memberarea a{	
+	font-size: 12px;
+	color:grey;
+	text-decoration: none;
+}
+span{
+	font-size:12px;
+	color:red;
+
+	
+}
