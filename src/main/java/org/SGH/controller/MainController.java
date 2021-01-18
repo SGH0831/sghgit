@@ -14,7 +14,7 @@ public class MainController {
 	@Autowired
 	private BoardService sv;
 	
-	
+	//홈
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public String main(Model model,Criteria cri) {
 		model.addAttribute("list", sv.getlist(cri));

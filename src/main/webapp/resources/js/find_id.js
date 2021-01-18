@@ -1,5 +1,6 @@
 $(document).ready(function(){
 	
+	/*아이디 찾기*/
 	$("#submit").on("click",function(){
 		var email=$("#email").val()
 		

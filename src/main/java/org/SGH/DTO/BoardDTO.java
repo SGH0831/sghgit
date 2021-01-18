@@ -1,15 +1,23 @@
 package org.SGH.DTO;
 
 public class BoardDTO {
+	//글번호
 	private int bno;
+	//제목
 	private String title;
+	//내용
 	private String content;
+	//글쓴이
 	private String writer;
+	//카테고리
 	private String category;
+	//조회수
 	private int hits;
+	//작성일
 	private String date;
-	private int likes;
+	//재료
 	private String material;
+	//첨부파일
 	private BoardAttachDTO attach;
 	public int getBno() {
 		return bno;
@@ -52,12 +60,6 @@ public class BoardDTO {
 	}
 	public void setDate(String date) {
 		this.date = date;
-	}
-	public int getLikes() {
-		return likes;
-	}
-	public void setLikes(int likes) {
-		this.likes = likes;
 	}
 	public BoardAttachDTO getAttach() {
 		return attach;

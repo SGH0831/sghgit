@@ -1,11 +1,14 @@
 $(document).ready(function(){
+	
 	var bno=$("#bno").val();	
+	/**/
 	$("#category option").each(function(){
 		if($(this).val()==$("#cate").val()){
 			$(this).attr("selected","selected")
 		}
 	})
 	img();	
+	/*이미지 가져오기*/
 	function img(){
 		$.getJSON("/br/"+bno+".json",function(data){
 			var callpath=encodeURIComponent(data.uploadpath+"/"+data.uuid+"_"+data.filename)
@@ -13,6 +16,7 @@ $(document).ready(function(){
 		})
 	}	
 	
+	/*수정*/
 	$("input[type='submit']").on("click",function(e){
 		var form =$("form")
 		e.preventDefault();
@@ -60,6 +64,7 @@ $(document).ready(function(){
 		}
 		e.preventDefault();
 	})
+	/*파일미리보기*/
 	$("#file").change(function(){
 		if($("#file").val()==""){
 			$("#img").removeAttr("src");			

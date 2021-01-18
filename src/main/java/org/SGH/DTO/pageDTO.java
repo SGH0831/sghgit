@@ -1,10 +1,15 @@
 package org.SGH.DTO;
 
 public class pageDTO {
+	//시작페이지
 	private int startPage;
+	//마지막페이지
 	private int endPage;
+	//이전버튼
 	private boolean prev;
+	//다음버튼
 	private boolean next;
+	//총 글수
 	private int total;
 	private Criteria cri;
 	

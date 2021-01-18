@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	
+	/*사진미리보기*/
 	$("#file").change(function(){
 		if($("#file").val()==""){
 			$("#img").removeAttr("src");			
@@ -23,6 +23,7 @@ $(document).ready(function(){
 		}
 	})
 	
+	/*글쓰기 파일등록*/
 	$("input[type='submit']").on("click",function(e){
 		var form =$("form")
 		e.preventDefault();

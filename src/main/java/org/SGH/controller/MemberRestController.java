@@ -26,17 +26,20 @@ public class MemberRestController {
 	@Autowired
 	private JavaMailSender mailSender;
 	
+	//아이디 중복확인
 	@RequestMapping(value="/{id}",method = RequestMethod.GET)
 	public int signcheck(@PathVariable("id")String id){
 		int result=sv.idch(id);
 		return result;
 	}
 	
+	//아이디 찾기
 	@PostMapping("/find_id")
 	public ResponseEntity<String> findid(@RequestBody MemberDTO dto){
 		return new ResponseEntity<>(sv.find_id(dto).getId(),HttpStatus.OK);
 	}
 	
+	//비밀번호찾기
 	@PostMapping("/find_pw")
 	public ResponseEntity<String> findpw(@RequestBody MemberDTO dto){
 		MemberDTO mdto=sv.find_id(dto);

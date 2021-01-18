@@ -1,5 +1,6 @@
 $(document).ready(function(){
 	
+	/*비밀번호 이메일전송*/
 	$("#submit").on("click",function(){
 		var email=$("#email").val()
 		

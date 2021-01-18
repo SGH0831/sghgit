@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	
+	/*로그인*/
 	$("input[type='submit']").on("click",function(e){
 		var id=$("#floatingInput").val()
 		var pw=$("#floatingPassword").val()
@@ -13,7 +13,7 @@ $(document).ready(function(){
 			e.preventDefault();
 		}
 	})
-	
+	//회원가입
 	$("#signup").on("click",function(){
 		location.href="/member/sign_up";
 

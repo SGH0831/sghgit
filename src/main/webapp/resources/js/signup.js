@@ -1,11 +1,12 @@
 $(document).ready(function(){
 	var date= new Date();
 	var y=date.getFullYear();
-	
+	/*년도설정*/
 	for(var i=y-100;i<=y;i++){
 		$("#YYYY").append("<option value='"+i+"'>"+i+"년</option>")
 	}
 	
+	/*월설정*/	
 	for(var i=1;i<=12;i++){
 		if(i<10){
 			$("#MM").append("<option value='0"+i+"'>0"+i+"월</option>")			
@@ -14,10 +15,12 @@ $(document).ready(function(){
 		}
 	}
 	days();
+	
 	$("#MM,#YYYY").on("change",function(){
 	days();
 	})
 	
+	/*일 설정*/
 	function days(){
 		$("#DD").html("<option>일</option>")
 		var yy=$("#YYYY").val();
@@ -34,12 +37,12 @@ $(document).ready(function(){
 		
 	}
 	
-	
+	/*윤년확인*/
 	function daysInMonth(year,month) {
     return new Date(year, month,0).getDate();
 	}
 	
-	
+	/*아이디 확인*/
 	$("#id").blur(function(){
 		idch();
 	})
@@ -84,6 +87,7 @@ $(document).ready(function(){
 		}
 		return tf		
 	}
+	/*비밀번호확인*/
 	$("#pw").blur(function(){
 		pwch();
 		})
@@ -126,6 +130,7 @@ $(document).ready(function(){
 			return false
 		}
 	}
+	/*이름확인*/
 	$("#name").blur(function(){
 		namech();
 	})
@@ -148,7 +153,7 @@ $(document).ready(function(){
 		}
 		
 	}
-		
+	/*이메일확인*/
 	$("#email").blur(function(){
 		emch();
 	})
@@ -174,6 +179,7 @@ $(document).ready(function(){
 	
 	
 	$("#submit").on("click",function(e){
+		/*생년월일 */
 		var birth=$("#YYYY").val()+$("#MM").val()+$("#DD").val();
 		var reg=/^[0-9]+$/
 		if(reg.test(birth)&&idch()&&pwch()&&pwcch()&&namech()&&emch()){

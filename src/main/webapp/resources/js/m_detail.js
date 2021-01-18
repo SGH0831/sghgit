@@ -1,9 +1,10 @@
 $(document).ready(function(){
-	
+	/*로그인확인*/
 	if(id==""){
 		location.href="/member/login";
 	}
 	
+	/*비밀번호 변경*/
 	$("#btn_modi").on("click",function(){
 		if(pwch()&&pwcch()){
 		var str="<input type='hidden' name='id' value='"+id+"'>"
@@ -14,6 +15,7 @@ $(document).ready(function(){
 		}
 	})
 	
+	/*회원탈퇴*/
 	$("#btn_userdel").on("click",function(){
 		var dform=$('<form></form>');
 		dform.attr("method","post");
@@ -24,7 +26,7 @@ $(document).ready(function(){
 		dform.submit();
 	})
 	
-	
+	/*비밀번호 체크*/
 	function pwch(){
 		var pw=$("#pw").val();
 		var reg=/^(?=.*[0-9])(?=.*[a-z]).{8,30}$/;
@@ -43,6 +45,7 @@ $(document).ready(function(){
 		}
 	}	
 	
+	/*비밀번호 확인 체크*/
 	function pwcch(){
 		var pw=$("#pw").val();
 		var pwc=$("#pwc").val();

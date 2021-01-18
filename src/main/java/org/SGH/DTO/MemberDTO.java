@@ -1,12 +1,17 @@
 package org.SGH.DTO;
 
 public class MemberDTO {
-	
+	//아이디
 	private String id;
+	//비밀번호
 	private String pw;
+	//이름
 	private String name;
+	//생일
 	private String birth;
+	//성별
 	private String gender;
+	//이메일
 	private String email;
 	public String getId() {
 		return id;
