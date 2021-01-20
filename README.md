@@ -50,7 +50,8 @@
 ## 5 기술 상세
 - [홈 화면](#홈-화면) 
 - [로그인](#로그인)
-- 회원가입 
+- [회원가입](#회원가입) 
+- [회원수정]
 - 글 작성 
 - 글 수정
 - 글 삭제
@@ -263,17 +264,74 @@ $(document).ready(function(){
 		return mm.login(dto);
 	}
 ```
-####  MemberMapper.java
+#### MemberMapper.java
 ```java
 	public MemberDTO login(MemberDTO dto); //로그인
 ```
+#### MemberMapper.xml
+```xml
+ 	<!-- 로그인 -->
+ 	<select id="login" resultType="org.SGH.DTO.MemberDTO">
+ 		select * from user where id=#{id} and pw=#{pw} 
+ 	</select>
+```
+
+### 회원가입
+
+#### MemberController.java
+```java
+ 	@GetMapping("/sign_up") //회원가입 창으로
+	public void signup() {
+		
+	}
+	@PostMapping("/sign_up") //회원가입
+	public String signup2(MemberDTO dto) {
+		sv.add(dto);
+		return "redirect:/member/login";
+	}
+```
+#### MemberService.java
+```java
+	public void add(MemberDTO dto); //회원가입
+```
+#### MemberServiceIpml.java
+```java
+	public void add(MemberDTO dto) { //회원가입
+		mm.add(dto);
+	}
+```
+#### MemberMapper.java
+```java
+	public void add(MemberDTO dto); //회원가입
+```
 ####  MemberMapper.xml
 ```xml
-	<!-- 회원가입-->
+ 	<!-- 회원가입-->
  	<insert id="add">
  		insert into user (id,pw,name,birth,gender,email) values(#{id},#{pw},#{name},#{birth},#{gender},#{email})
  	</insert>
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### 5.1 홈 관련
 #### MainController.java
