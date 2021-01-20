@@ -6,8 +6,9 @@
 - 2 개발 환경
 - 3 UI 설계
 - 4 DB 설계
-- 5 기술 상세
-
+- 5 기술 상세  
+   5.1 홈 관련
+   
 ## 1 기획의도
 
 <img src="https://user-images.githubusercontent.com/77423948/105108845-87b65a80-5afe-11eb-8eeb-1e15fc56dec5.jpg" width="400" >  
@@ -32,6 +33,7 @@
 
 ## 5 기술 상세
 ### 5.1 홈 관련
+### 5.1.1 Controller
 #### MainController.java
 ```java
 package org.SGH.controller;
@@ -60,6 +62,7 @@ public class MainController {
 
 ```
 ### 5.2 게시판 관련
+### 5.2.1 Controller
 #### BoardController.java 
 ```java
 package org.SGH.controller;
@@ -317,5 +320,68 @@ public class ReplyController {
 		return result ==1 ? new ResponseEntity<>("success",HttpStatus.OK)
 				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+}
+```
+### 5.2.2 Service
+
+#### BoardService.java
+```java
+package org.SGH.Service;
+
+import java.util.ArrayList;
+
+import org.SGH.DTO.BoardAttachDTO;
+import org.SGH.DTO.BoardDTO;
+import org.SGH.DTO.Criteria;
+import org.SGH.DTO.LikesDTO;
+import org.SGH.DTO.MemberDTO;
+import org.SGH.DTO.replyDTO;
+
+public interface BoardService {
+	
+	//main
+	public ArrayList<BoardDTO> getlist(Criteria cri);
+	//게시글 총수
+	public int total(Criteria cri);
+	
+	//board
+	//게시글 작성
+	public void write(BoardDTO dto);
+	//게시글 보기
+	public BoardDTO detail(BoardDTO dto);
+	//조회수 증가
+	public void hits(BoardDTO dto);
+	//게시글 수정
+	public void modify(BoardDTO dto);
+	//게시글 삭제
+	public void delete(BoardDTO dto);
+	//나의 추천글 보기
+	public ArrayList<BoardDTO> mylikes(Criteria cri,MemberDTO dto);
+	//나의 추천글 총수
+	public int liketotal(Criteria cri,MemberDTO dto);
+	
+	//reply
+	//댓글 보기
+	public ArrayList<replyDTO> list(int bno);
+	//댓글 작성
+	public int rewrite(replyDTO dto);
+	//댓글 수정
+	public int remodify(replyDTO dto);
+	//댓글 삭제
+	public int redelete(replyDTO dto);
+	
+	//boardRest
+	//첨부사진 이미지 경로 가져오기
+	public BoardAttachDTO getimg(int bno);
+	//첨부사진 삭제
+	public int attdelete(BoardAttachDTO dto);
+	//추천상태 확인
+	public int likes(LikesDTO dto);
+	//추천 추가
+	public int likesadd(LikesDTO dto);
+	//추천 삭제
+	public int likedel(LikesDTO dto);
+	//추천 수
+	public int likenum(int bno);
 }
 ```
