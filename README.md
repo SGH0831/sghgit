@@ -30,8 +30,8 @@
   IDE:Eclipse  
   Server:Apache tomcat 8.5  
   DB:MySQL  
-  Language:JAVA,JSP,JavaScropt 
-  framework:Spring,bootstrap
+  Language:JAVA,JSP,JavaScropt  
+  framework:Spring,bootstrap  
   ORM:MyBatis  
   
   
@@ -814,40 +814,33 @@ $(document).ready(function(){
 	likes();	
 	replylist();
 	
-	/*이미지 가져오기*/
-	function img(){
+	function img(){ /* 이미지 띄우기 */
 		$.getJSON("/br/"+bno+".json",function(data){
 			var callpath=encodeURIComponent(data.uploadpath+"/"+data.uuid+"_"+data.filename)
 			$("#img").attr("src","/br/display?filename="+callpath )
 		})
 	}	
-	/*로그인*/
-	$("#login_btn").on("click",function(){
+	$("#login_btn").on("click",function(){ /* 로그인 */
 		location.href="/member/login";
 	})
-	/*로그아웃*/
-	$("#logout_btn").on("click",function(){
+	$("#logout_btn").on("click",function(){ /* 로그아웃 */
 		alert("로그아웃")
 		location.href="/member/logout"
 	})
-	/*글쓰기*/
-	$("#write").on("click",function(){
+	$("#write").on("click",function(){ /* 글쓰기 */
 		location.href="/board/write"
 	})
-	/*추천*/
-	$("#mylike").on("click",function(){
+	$("#mylike").on("click",function(){ /* 추천 */
 		location.href="/board/likes"
 	})
-	/*홈*/
-	$("#menu").on("click",function(){
+	$("#menu").on("click",function(){ /* 홈 */
 		location.href="/main/"
 	})
-	/*댓글 쓰기*/
-	$("#rebutton").on("click",function(){
-		if(id!=""){
+	$("#rebutton").on("click",function(){ /* 댓글 작성 */
+		if(id!=""){ /* 로그인 확인 */
 		var reply_writer =id;
 		var reply_content =$("#replytext").val();
-		$.ajax({
+		$.ajax({ /* 댓글 작성 */
 			url:"/reply/write",
 			type:"post",
 			contentType:"application/json; charset=utf-8",
@@ -863,10 +856,9 @@ $(document).ready(function(){
 			alert("로그인필요")
 		}	
 	})
-	/*댓글 리스트*/
-	function replylist(){
+	function replylist(){ /* 댓글 목록 */
 		var str="";
-		$.getJSON("/reply/"+bno+".json",function(data){
+		$.getJSON("/reply/"+bno+".json",function(data){ /* 댓글 목록 가져오기 */
 			$(data).each(function(){
 				str+="<li class='border' data-rno='"+this.rno+"'><p class='re_writer fw-bold'>"+this.reply_writer+"</p><p class='re_content'>"+this.reply_content+"</p>"
 				if(id==this.reply_writer){
@@ -876,34 +868,28 @@ $(document).ready(function(){
 			$("#replies").html(str)
 		})
 	}
-		
 	
-	/*글 수정*/
-	$("#modify").on("click",function(){
+	$("#modify").on("click",function(){ /* 글수정 */
 		location.href="/board/modify?bno="+bno		
 	})	
 	
-	/*글 삭제*/
-	$("#delete").on("click",function(){
+	$("#delete").on("click",function(){ /* 글 삭제 */
 		var form = $("#form")
 		form.attr("action","/board/delete")
 		form.attr("method","post")
 		form.submit();
 	})	
 	
-	
-	/*댓글수정*/
-	$("#replies").on("click",".remodi",function(){
+	$("#replies").on("click",".remodi",function(){  /*댓글 수정*/
 		var rno=$(this).parents("li").data("rno")
 		var text=$(this).parent().prev(".re_content").html();
-		$(this).parents("li").replaceWith("<textarea data-rno='"+rno+"' class='modiarea' maxlength='100'>"+text+"</textarea><div><button class='modisub btn btn-success'>확인</button><button class='modican  btn btn-success'>취소</button></div>");
+		$(this).parents("li").replaceWith("<textarea data-rno='"+rno+"' class='modiarea' maxlength='100'>"+text+"</textarea><div><button class='modisub btn btn-success'>확인</button><button class='modican  btn btn-success'>취소</button></div>"); /* textarea로 변환 */
 	})
 		
-	/*댓글수정 확인*/
-	$("#replies").on("click",".modisub",function(){
+	$("#replies").on("click",".modisub",function(){ /* 댓글수정 확인 */
 		var rno=$(this).parent().prev("textarea").data("rno")
 		var reply_content=$(this).parent().prev("textarea").val();
-		$.ajax({
+			$.ajax({  /* 댓글 수정 */
 				url:"/reply/modify",
 				type:"put",
 				contentType:"application/json; charset=utf-8",
@@ -914,14 +900,12 @@ $(document).ready(function(){
 				}
 		})
 	})	
-	/*댓글수정 취소*/
-	$("#replies").on("click",".modican",function(){
+	$("#replies").on("click",".modican",function(){ /* 댓글수정 취소 */
 		replylist();
 	})	
-	/*댓글 수정*/
-	$("#replies").on("click",".redel",function(){
+	$("#replies").on("click",".redel",function(){ /* 댓글 삭제 */
 		var rno=$(this).parents("li").data("rno")
-		$.ajax({
+		$.ajax({ 
 				url:"/reply/delete",
 				type:"delete",
 				contentType:"application/json; charset=utf-8",
@@ -932,18 +916,17 @@ $(document).ready(function(){
 				}
 		})
 	})
-	/*추천*/
-	$("#likesbox").on("click",function(){
+	$("#likesbox").on("click",function(){ /* 해당 글 추천 */
 		if(id!=null&&id!=''){
-			$.ajax({
+			$.ajax({ /* 해당 글의 나의 추천 상태 확인 */
 				url:"/br/likes",
 				type:"post",
 				contentType:"application/json; charset=utf-8",
 				data:JSON.stringify({bno:bno,id:id}),
 				async:false,
 				success:function(result){
-					if(result==1){
-						$.ajax({
+					if(result==1){ /* 추천 상태 일 경우 */
+						$.ajax({ /* 추천 취소 */
 							url:"/br/likesdel",
 							type:"delete",
 							async:false,
@@ -954,8 +937,8 @@ $(document).ready(function(){
 							},error:function(){
 							}
 						})
-					}else{
-						$.ajax({
+					}else{ /* 추천 상태가 아닐 경우 */
+						$.ajax({ /* 추천 추가 */
 							url:"/br/likesadd",
 							type:"put",
 							async:false,
@@ -975,18 +958,17 @@ $(document).ready(function(){
 		}
 	})
 	
-	/*추천 확인*/
-	function likes(){
+	function likes(){ /* 추천 확인 */
 		if(id!=null&&id!=''){
-			$.ajax({
+			$.ajax({ /* 해당 글의 나의 추천 상태 확인 */
 				url:"/br/likes",
 				type:"post",
 				contentType:"application/json; charset=utf-8",
 				data:JSON.stringify({bno:bno,id:id}),
 				success:function(result){
-					if(result==1){
+					if(result==1){ /* 추천 상태 일 경우 */
 						$("#likesbox").html("추천취소")
-					}else{
+					}else{ /* 추천 상태가 아닐 경우 */
 						$("#likesbox").html("추천")
 					}
 				}
