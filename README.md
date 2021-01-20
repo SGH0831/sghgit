@@ -59,6 +59,120 @@
   <img src="https://user-images.githubusercontent.com/77423948/105127744-d2e36400-5b24-11eb-81bf-fe1f138872bc.PNG">
 
 ## 5 기술 상세
+- [홈 화면](#홈-화면) 
+- 로그인
+- 회원가입 
+- 글 작성 
+- 글 수정
+- 글 삭제
+- 추천
+- 댓글 작성
+- 댓글 수정
+- 댓글 삭제
+
+
+
+
+
+### 홈 화면
+
+#### MainController.java
+```java
+
+@Controller
+public class MainController {
+	@Autowired
+	private BoardService sv;
+	
+	@RequestMapping(value="/", method=RequestMethod.GET) //홈
+	public String main(Model model,Criteria cri) {
+		model.addAttribute("list", sv.getlist(cri)); //글 목록
+		model.addAttribute("page",new pageDTO(cri,sv.total(cri))); //페이징
+		return "main";
+
+```
+#### BoardService.java
+```java
+	//MainController
+	public ArrayList<BoardDTO> getlist(Criteria cri); //게시글 목록
+	public int total(Criteria cri); //게시글 수
+	
+```
+#### BoardRestController.java
+```java
+	//MainController
+	public ArrayList<BoardDTO> getlist(Criteria cri) { //게시글 목록
+		return bm.getlist(cri);
+```
+
+#### BoardMapper.java
+```java
+	//MainController
+	public ArrayList<BoardDTO> getlist(Criteria cri); //게시글 목록
+	public int total(Criteria cri); //게시글 수
+```
+#### BoardMapper.xml
+```xml
+<!-- MainController -->	
+	<!-- 게시글 목록  -->
+	<select id="getlist" resultType="org.SGH.DTO.BoardDTO">
+ 		select * from(
+		select @rownum:=@rownum+1 as rownum, b.* from (select @rownum:=0) as tmp,
+		<choose>
+		<!-- 인기순 검색 -->
+		<when test="order=='likes'.toString">
+		(select board.*,ci from board left join (select count(id) as ci, bno from likes group by bno) a on board.bno=a.bno) 
+		</when>
+		<otherwise>
+		 board 
+		</otherwise>
+		</choose>
+		 as b order by 
+		<choose>
+		<!-- 조회수순 검색 -->
+		<when test="order=='hits'.toString">
+		hits desc,
+		</when>
+		<!-- 순 검색 -->
+		<when test="order=='likes'.toString">
+		ci desc,
+		</when>
+		</choose>
+		 bno desc) board
+		where
+		<!-- 페이징 -->
+ 	<![CDATA[
+		 rownum>((#{pageNum}-1)*#{amount})and rownum<=(#{pageNum}*#{amount})
+ 	]]>
+		<if test="type != null">
+			<!-- 카테고리 검색 -->
+			<if test="type=='category'.toString">
+				and category like CONCAT('%',#{keyword},'%');
+			</if>
+			<!-- 제목 검색 -->
+			<if test="type=='title'.toString">
+				and title like CONCAT('%',#{keyword},'%');
+			</if>
+		</if>
+	</select>
+	
+	<!-- 게시글 수 -->
+	<select id="total" resultType="int">
+		select count(*) from board
+		<if test="type != null">
+			<!-- 카테고리 검색 -->
+			<if test="type=='category'.toString">
+				where category like CONCAT('%',#{keyword},'%');
+			</if>
+			<!-- 제목 검색 -->
+			<if test="type=='title'.toString">
+				where title like CONCAT('%',#{keyword},'%');
+			</if>
+		</if>
+	</select>
+	
+```
+
 ### 5.1 홈 관련
 #### MainController.java
 ```java
