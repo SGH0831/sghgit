@@ -1265,7 +1265,18 @@ public class MemberRestController {
 ### Service
 #### MemberService.java
 ```java
+package org.SGH.Service;
 
+import org.SGH.DTO.MemberDTO;
+
+public interface MemberService {
+	public int idch(String id); //아이디 체크
+	public void add(MemberDTO dto); //회원가입
+	public MemberDTO login(MemberDTO dto); //로그인 
+	public MemberDTO find_id(MemberDTO dto); //아이디 찾기
+	public void modify(MemberDTO dto); //회원 정보 수정
+	public void delete(MemberDTO dto); //회원 탈퇴
+}
 ```
 #### MemberServiceIpml.java
 ```java
