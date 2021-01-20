@@ -8,16 +8,16 @@
 [4. DB 설계](#4-db-설계)  
 [5. 기술 상세](#5-기술-상세)  
 	* [5.1 홈 관련](#51-홈-관련)  
-		* 5.1.1 Controller
+		* 5.1.1 Controller  
 	* [5.2 게시판 관련](#52-게시판-관련)  
-		* 5.2.1 Controller
-		* 5.2.2 Service
-		* 5.2.3 Mapper
-		* 5.2.4 Js
+		* 5.2.1 Controller  
+		* 5.2.2 Service  
+		* 5.2.3 Mapper  
+		* 5.2.4 Js  
 	* [5.3 사용자 관련](#53-사용자-관련)  
-		* 5.3.1 Controller
-		* 5.3.2 Service
-		* 5.3.3 Mapper
+		* 5.3.1 Controller  
+		* 5.3.2 Service  
+		* 5.3.3 Mapper  
 ## 1 기획의도
 
 <img src="https://user-images.githubusercontent.com/77423948/105108845-87b65a80-5afe-11eb-8eeb-1e15fc56dec5.jpg" width="400" >  
