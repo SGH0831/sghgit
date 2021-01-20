@@ -514,3 +514,170 @@ public interface BoardMapper {
 	public int likenum(int bno); //해당 글의 추천수
 }
 ```
+#### BoardMapper.xml
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.SGH.mapper.BoardMapper">
+	<!-- MainController -->	
+	<!-- 게시글 목록  -->
+	<select id="getlist" resultType="org.SGH.DTO.BoardDTO">
+ 		select * from(
+		select @rownum:=@rownum+1 as rownum, b.* from (select @rownum:=0) as tmp,
+		<choose>
+		<!-- 인기순 검색 -->
+		<when test="order=='likes'.toString">
+		(select board.*,ci from board left join (select count(id) as ci, bno from likes group by bno) a on board.bno=a.bno) 
+		</when>
+		<otherwise>
+		 board 
+		</otherwise>
+		</choose>
+		 as b order by 
+		<choose>
+		<!-- 조회수순 검색 -->
+		<when test="order=='hits'.toString">
+		hits desc,
+		</when>
+		<!-- 순 검색 -->
+		<when test="order=='likes'.toString">
+		ci desc,
+		</when>
+		</choose>
+		 bno desc) board
+		where
+		<!-- 페이징 -->
+ 	<![CDATA[
+		 rownum>((#{pageNum}-1)*#{amount})and rownum<=(#{pageNum}*#{amount})
+ 	]]>
+		<if test="type != null">
+			<!-- 카테고리 검색 -->
+			<if test="type=='category'.toString">
+				and category like CONCAT('%',#{keyword},'%');
+			</if>
+			<!-- 제목 검색 -->
+			<if test="type=='title'.toString">
+				and title like CONCAT('%',#{keyword},'%');
+			</if>
+		</if>
+	</select>
+	
+	<!-- 게시글 수 -->
+	<select id="total" resultType="int">
+		select count(*) from board
+		<if test="type != null">
+			<!-- 카테고리 검색 -->
+			<if test="type=='category'.toString">
+				where category like CONCAT('%',#{keyword},'%');
+			</if>
+			<!-- 제목 검색 -->
+			<if test="type=='title'.toString">
+				where title like CONCAT('%',#{keyword},'%');
+			</if>
+		</if>
+	</select>
+	
+	<!-- BoardController -->
+	<!-- 게시글 작성 -->
+	<insert id="write" useGeneratedKeys="true" keyProperty="bno">
+		insert into board
+		(title,content,writer,category,material)values(#{title},#{content},#{writer},#{category},#{material})
+	</insert>
+
+	<!-- 파일업로드 -->
+	<insert id="insert">
+		insert into attach (uuid,uploadpath,filename,bno)
+		values(#{uuid},#{uploadpath},#{filename},#{bno})
+	</insert>
+	
+	<!-- 게시글 보기 -->
+	<select id="detail" resultType="org.SGH.DTO.BoardDTO">
+		select * from board where bno=#{bno}
+	</select>
+	
+	<!-- 조회수 증가 -->
+	<update id="hits">
+		update board set hits = hits+1 where bno=#{bno}
+	</update>
+	
+	<!-- 게시글 수정 -->
+	<update id="modify">
+		update board set title=#{title},content=#{content},category=#{category},material=#{material} where bno=#{bno}
+	</update>
+	
+	<!-- 게시글 삭제 -->
+	<delete id="delete">
+		delete from board where bno=#{bno};
+	</delete>
+	
+	<!-- 내가 추천 한 글 목록 -->
+	<select id="mylikes" resultType="org.SGH.DTO.BoardDTO" parameterType="map">
+		select * from
+		(
+		select @rownum:=@rownum+1 as rownum, b.* from (select @rownum:=0) as tmp, (select * from board where bno=any(select bno from likes where id=#{dto.id})) as b order by bno desc ) as board where
+		<!-- 페이징 -->
+		<![CDATA[
+		 rownum>((#{cri.pageNum}-1)*#{cri.amount})and rownum<=(#{cri.pageNum}*#{cri.amount})
+		]]>
+	</select>
+	
+	<!-- 내가 추천 한 글 수 -->
+	<select id="liketotal" resultType="int">
+		select count(*) from likes where id=#{dto.id}
+	</select>
+	
+	<!-- replyController -->
+	<!-- 댓글 목록 -->
+	<select id="list" resultType="org.SGH.DTO.replyDTO">
+		select * from reply where bno=#{bno} order by rno desc;
+	</select>
+	
+	<!-- 댓글 작성 -->
+	<insert id="rewrite">
+		insert into reply (bno,reply_writer,reply_content)values(#{bno},#{reply_writer},#{reply_content})
+	</insert>
+	
+	<!-- 댓글 수정 -->
+	<update id="remodify">
+		update reply set reply_content=#{reply_content} where rno=#{rno}
+	</update>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="redelete">
+		delete from reply where rno=#{rno}	
+	</delete>
+	
+	<!-- -->
+	<!--해당 글의 이미지 가져오기  -->
+	<select id="getimg" resultType="org.SGH.DTO.BoardAttachDTO">
+		select * from attach where bno=#{bno}
+	</select>
+	
+	<!-- 해당 글의 이미지 삭제 -->
+	<delete id="attdelete">
+		delete from attach where bno=#{bno};
+	</delete>
+	
+	<!-- 해당 글의 나의 추천상태 확인 -->
+	<select id="likes" resultType="int">
+		select count(*) from likes where id=#{id} and bno=#{bno}
+	</select>
+	
+	<!-- 추천 추가 -->
+	<insert id="likesadd">
+		insert into likes (id,bno) values(#{id},#{bno});
+	</insert>
+	
+	<!-- 추천  -->
+	<delete id="likedel">
+		delete from likes where bno=#{bno} and id=#{id}
+	</delete>
+	
+	<!-- 해당 글의 추천수  -->
+	<select id="likenum" resultType="int">
+		select count(*) from likes where bno=#{bno}
+	</select>
+</mapper>
+```
