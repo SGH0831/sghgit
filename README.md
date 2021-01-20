@@ -60,7 +60,6 @@
 
 ## 5 기술 상세
 ### 5.1 홈 관련
-### 5.1.1 Controller
 #### MainController.java
 ```java
 package org.SGH.controller;
@@ -87,6 +86,70 @@ public class MainController {
 	}
 }
 
+```
+
+#### main.js
+
+```js
+$(document).ready(function(){
+
+	img();
+	likes();
+	
+	$("#login_btn").on("click",function(){ /* 로그인 */
+		location.href="/member/login";
+	})
+	
+	$("#logout_btn").on("click",function(){ /* 로그아웃 */
+		alert("로그아웃")
+		location.href="/member/logout"
+	})
+	$("#write").on("click",function(){ /* 글 작성 */
+		location.href="/board/write"
+	})
+	
+	$(".card").on("click",function(){ /* 글 보기 */
+		var bno =$(this).data("bno")
+		location.href="/board/detail?bno="+bno;
+	})
+	
+	$("#search").on("keydown",function(k){ /* 글 검색 엔터 키*/
+		if(k.keyCode==13){
+		var search=$("#search").val()		
+		location.href="/?type=title&keyword="+search
+		}
+	})
+	
+	$("#searchbtn").on("click",function(){ /* 글 검색 검색 버튼 */
+		var search=$("#search").val()		
+		location.href="/?type=title&keyword="+search
+		
+	})
+	
+	$("#mylike").on("click",function(){ /* 나의 추천 글 */
+		location.href="/board/likes"
+	})
+	function img(){ /* 썸네일 */
+	$("#contents .card").each(function(){
+		var bno=$(this).data("bno")
+		var ob=$(this)
+		$.getJSON("/br/"+bno+".json",function(data){
+			var callpath=encodeURIComponent(data.uploadpath+"/S_"+data.uuid+"_"+data.filename)
+			ob.find("img").attr("src","/br/display?filename="+callpath )
+			})
+		})	
+	}
+	
+	function likes(){ /* 해당 글의 추천 수 */
+		$("#contents .card").each(function(){
+		var bno=$(this).data("bno")
+		var ob=$(this)
+		$.getJSON("/br/likenum/"+bno+".json",function(data){
+			ob.find(".likes").html(data)
+		})
+		})
+	}	
+})
 ```
 ### 5.2 게시판 관련
 ### 5.2.1 Controller
@@ -706,69 +769,7 @@ public interface BoardMapper {
 
 ### 5.2.4 Js
 
-#### main.js
 
-```js
-$(document).ready(function(){
-
-	img();
-	likes();
-	
-	$("#login_btn").on("click",function(){ /* 로그인 */
-		location.href="/member/login";
-	})
-	
-	$("#logout_btn").on("click",function(){ /* 로그아웃 */
-		alert("로그아웃")
-		location.href="/member/logout"
-	})
-	$("#write").on("click",function(){ /* 글 작성 */
-		location.href="/board/write"
-	})
-	
-	$(".card").on("click",function(){ /* 글 보기 */
-		var bno =$(this).data("bno")
-		location.href="/board/detail?bno="+bno;
-	})
-	
-	$("#search").on("keydown",function(k){ /* 글 검색 엔터 키*/
-		if(k.keyCode==13){
-		var search=$("#search").val()		
-		location.href="/?type=title&keyword="+search
-		}
-	})
-	
-	$("#searchbtn").on("click",function(){ /* 글 검색 검색 버튼 */
-		var search=$("#search").val()		
-		location.href="/?type=title&keyword="+search
-		
-	})
-	
-	$("#mylike").on("click",function(){ /* 나의 추천 글 */
-		location.href="/board/likes"
-	})
-	function img(){ /* 썸네일 */
-	$("#contents .card").each(function(){
-		var bno=$(this).data("bno")
-		var ob=$(this)
-		$.getJSON("/br/"+bno+".json",function(data){
-			var callpath=encodeURIComponent(data.uploadpath+"/S_"+data.uuid+"_"+data.filename)
-			ob.find("img").attr("src","/br/display?filename="+callpath )
-			})
-		})	
-	}
-	
-	function likes(){ /* 해당 글의 추천 수 */
-		$("#contents .card").each(function(){
-		var bno=$(this).data("bno")
-		var ob=$(this)
-		$.getJSON("/br/likenum/"+bno+".json",function(data){
-			ob.find(".likes").html(data)
-		})
-		})
-	}	
-})
-```
 
 #### write.js 
 ```js
