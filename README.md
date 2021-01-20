@@ -2,18 +2,18 @@
 <img src="https://user-images.githubusercontent.com/77423948/105048569-113e3c00-5aaf-11eb-80f5-0d7790f43d79.png" width="350" height="350px">
 
 ### 목록
-- 기획 의도
-- 개발 환경
-- UI 설계
-- DB 설계
-- 기술 상세
-  - 홈 관련
-    - Controller
-  - 게시판 관련
-    - Controller
-    - Service
-    - Mapper(Java)
-    - Mapper(XML)
+1. 기획 의도
+2. 개발 환경
+3. UI 설계
+4. DB 설계
+5. 기술 상세
+	* 5.1 홈 관련
+		* 5.1.1 Controller
+	* 5.2 게시판 관련
+		* 5.2.1 Controller
+		* 5.2.2 Service
+		* 5.2.3 Mapper(Java)
+		* 5.2.4 Mapper(XML)
 ## 1 기획의도
 
 <img src="https://user-images.githubusercontent.com/77423948/105108845-87b65a80-5afe-11eb-8eeb-1e15fc56dec5.jpg" width="400" >  
@@ -344,12 +344,11 @@ import org.SGH.DTO.replyDTO;
 
 public interface BoardService {
 	
-	//main
-	public ArrayList<BoardDTO> getlist(Criteria cri);
-	//게시글 총수
-	public int total(Criteria cri);
+	//MainController
+	public ArrayList<BoardDTO> getlist(Criteria cri); //게시글 목록
+	public int total(Criteria cri); //게시글 수
 	
-	//board
+	//BoardController
 	//게시글 작성
 	public void write(BoardDTO dto);
 	//게시글 보기
