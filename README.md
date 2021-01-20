@@ -311,11 +311,88 @@ $(document).ready(function(){
  		insert into user (id,pw,name,birth,gender,email) values(#{id},#{pw},#{name},#{birth},#{gender},#{email})
  	</insert>
 ```
+가입시 중복 확인
 
+####
+```js
+	$("#id").blur(function(){  /* 아이디 확인 */
+		idch();
+	})
+		
+	function idch(){
+		var id=$("#id").val();
+		var tf="";
+		var reg=/^[a-z0-9]{4,20}$/; /* 유효성 검사 */
+		if(id==""){
+			$("#idch").text("필수")
+			$("#idch").css("color","red")
+			tf=false
+		}else{
+			try{
+				$.ajax({
+					url:"/mr/"+encodeURI(id),
+					contentType:"application/json; charset=utf-8",
+					type:"GET",
+					async:false,
+					success:function(result){
+					if(result=="1"){ /* 해당 아이디가 이미 있을시 */
+						$("#idch").text("사용중인 아이디 입니다")				
+						$("#idch").css("color","red")
+						tf=false
+					}else{
+						if(reg.test(id)){ /* 유효성 검사 */
+							$("#idch").text("사용가능한 아이디 입니다")
+							$("#idch").css("color","green")
+							tf=true
+						}else{ /* 유효성 검사 통과x */
+							$("#idch").text("4~20자의 영문 소문자,숫자")				
+							$("#idch").css("color","red")
+							tf=false
+						}
+					}
+					},error:function(){
+					}	
+				})
+			}catch(e){
+			}
+		}
+		return tf		
+	}
+```
 
+####
+```java
+	@RequestMapping(value="/{id}",method = RequestMethod.GET) //아이디 중복 확인 
+	public int signcheck(@PathVariable("id")String id){
+		int result=sv.idch(id);
+		return result;
+	}
+```
 
+####
+```java
+	public int idch(String id); //아이디 중복 확인
+```
 
+####
+```java
+	public int idch(String id) { //아이디 중복 확인
+		return mm.idch(id);
+	}
+```
 
+####
+```java
+	public int idch(String id); //아이디 중복 확인
+```
+
+####
+```xml
+ 	<!-- 아이디 중복확인 -->
+	<select id="idch" resultType="int">
+		select count(*) from user where id=#{id}
+	</select> 
+```
 
 
 
