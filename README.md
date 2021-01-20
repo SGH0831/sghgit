@@ -1270,7 +1270,7 @@ package org.SGH.Service;
 import org.SGH.DTO.MemberDTO;
 
 public interface MemberService {
-	public int idch(String id); //아이디 체크
+	public int idch(String id); //아이디 중복 확인
 	public void add(MemberDTO dto); //회원가입
 	public MemberDTO login(MemberDTO dto); //로그인 
 	public MemberDTO find_id(MemberDTO dto); //아이디 찾기
@@ -1280,15 +1280,283 @@ public interface MemberService {
 ```
 #### MemberServiceIpml.java
 ```java
+package org.SGH.Service;
+
+import org.SGH.DTO.MemberDTO;
+import org.SGH.mapper.MemberMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class MemberServiceIpml implements MemberService{
+	@Autowired
+	private MemberMapper mm;
+	
+	public int idch(String id) { //아이디 중복 확인
+		return mm.idch(id);
+	}
+
+	public void add(MemberDTO dto) { //회원가입
+		mm.add(dto);
+	}
+
+	public MemberDTO login(MemberDTO dto) { //로그인
+		return mm.login(dto);
+	}
+
+	public MemberDTO find_id(MemberDTO dto) { //아이디 찾기
+		return mm.find_id(dto);
+	}
+
+	public void modify(MemberDTO dto) { //회원 정보 수정
+		mm.modify(dto);
+	}
+
+	public void delete(MemberDTO dto) { //회원탈퇴
+		mm.delete(dto);
+	}
+	
+}
 ```
 ### Mapper
 #### MemberMapper.java
 ```java
+package org.SGH.mapper;
+
+import org.SGH.DTO.MemberDTO;
+
+public interface MemberMapper {
+	public int idch(String id); //아이디 중복 확인
+	public void add(MemberDTO dto); //회원가입
+	public MemberDTO login(MemberDTO dto); //로그인
+	public MemberDTO find_id(MemberDTO dto); //아이디찾기
+	public void modify(MemberDTO dto); //회원 수정
+	public void delete(MemberDTO dto); //회원 탈퇴
+}
 ```
 #### MemberMapper.xml
 ```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="org.SGH.mapper.MemberMapper">
+ 
+ 	<!-- 아이디 중복확인 -->
+	<select id="idch" resultType="int">
+		select count(*) from user where id=#{id}
+	</select> 
+ 
+ 	<!-- 회원가입-->
+ 	<insert id="add">
+ 		insert into user (id,pw,name,birth,gender,email) values(#{id},#{pw},#{name},#{birth},#{gender},#{email})
+ 	</insert>
+ 
+ 	<!-- 로그인 -->
+ 	<select id="login" resultType="org.SGH.DTO.MemberDTO">
+ 		select * from user where id=#{id} and pw=#{pw} 
+ 	</select>
+	
+	<!-- 아이디 찾기 -->
+	<select id="find_id" resultType="org.SGH.DTO.MemberDTO">
+		select * from user where email=#{email}
+	</select>
+	
+	<!-- 회원 수정 -->
+	<update id="modify">
+		update user set pw=#{pw} where id=#{id}
+	</update>
+	
+	<!-- 회원 탈퇴 -->
+	<delete id="delete">
+		delete from user where id=#{id}
+	</delete>
+ </mapper>
 ```
 ### js
-####
+#### signup.js 
 ````js
+$(document).ready(function(){
+	var date= new Date();
+	var y=date.getFullYear();
+	for(var i=y-100;i<=y;i++){ /* select option 년도설정 */
+		$("#YYYY").append("<option value='"+i+"'>"+i+"년</option>")
+	}
+	for(var i=1;i<=12;i++){ /*  select option 월설정 */	
+		if(i<10){
+			$("#MM").append("<option value='0"+i+"'>0"+i+"월</option>")			
+		}else{
+			$("#MM").append("<option value='"+i+"'>"+i+"월</option>")			
+		}
+	}
+	days();
+	
+	$("#MM,#YYYY").on("change",function(){
+	days();
+	})
+	
+	function days(){ /* 일 설정 */
+		$("#DD").html("<option>일</option>")
+		var yy=$("#YYYY").val();
+		var mm=$("#MM").val();
+		var day=daysInMonth($("#YYYY").val(),$("#MM").val())
+		
+		for(var i=1;i<=day;i++){
+			if(i<10){
+			$("#DD").append("<option value='0"+i+"'>0"+i+"일</option>")
+			}else{
+			$("#DD").append("<option value='"+i+"'>"+i+"일</option>")
+			}
+		}
+		
+	}
+	
+	function daysInMonth(year,month) { /* 윤년확인 */
+    return new Date(year, month,0).getDate();
+	}
+	
+	$("#id").blur(function(){  /* 아이디 확인 */
+		idch();
+	})
+		
+	function idch(){
+		var id=$("#id").val();
+		var tf="";
+		var reg=/^[a-z0-9]{4,20}$/; /* 유효성 검사 */
+		if(id==""){
+			$("#idch").text("필수")
+			$("#idch").css("color","red")
+			tf=false
+		}else{
+			try{
+				$.ajax({
+					url:"/mr/"+encodeURI(id),
+					contentType:"application/json; charset=utf-8",
+					type:"GET",
+					async:false,
+					success:function(result){
+					if(result=="1"){ /* 해당 아이디가 이미 있을시 */
+						$("#idch").text("사용중인 아이디 입니다")				
+						$("#idch").css("color","red")
+						tf=false
+					}else{
+						if(reg.test(id)){ /* 유효성 검사 */
+							$("#idch").text("사용가능한 아이디 입니다")
+							$("#idch").css("color","green")
+							tf=true
+						}else{ /* 유효성 검사 통과x */
+							$("#idch").text("4~20자의 영문 소문자,숫자")				
+							$("#idch").css("color","red")
+							tf=false
+						}
+					}
+					},error:function(){
+					}	
+				})
+			}catch(e){
+			}
+		}
+		return tf		
+	}
+	$("#pw").blur(function(){ /* 비밀번호 확인 */
+		pwch();
+		})
+		
+	function pwch(){
+		var pw=$("#pw").val();
+		var reg=/^(?=.*[0-9])(?=.*[a-z]).{8,30}$/; /* 유효성 검사 */
+		if(reg.test(pw)){ /* 유효성 검사 */
+			$("#pwch").text("사용가능")
+			$("#pwch").css("color","green")
+			return true
+		}else if(pw==""){ /* 빈값일시 */
+			$("#pwch").text("필수")
+			$("#pwch").css("color","red")
+			return false
+		}else{ /* 유효성 검사 통과x */
+			$("#pwch").text("영문 소문자와 숫자를 반드시 조합하여 8~30자")
+			$("#pwch").css("color","red")
+			return false
+		}
+	}	
+			
+	$("#pwc").blur(function(){ /* 비밀번호 확인 */
+		pwcch();
+	})
+	function pwcch(){
+		var pw=$("#pw").val();
+		var pwc=$("#pwc").val();
+		if(pwc==""){
+			$("#pwcch").text("필수")
+			$("#pwcch").css("color","red")
+			return false
+		}else if(pw==pwc){ /* 비밀번호와 확인이 같을시 */
+			$("#pwcch").text("확인")
+			$("#pwcch").css("color","green")
+			return true
+		}else{
+			$("#pwcch").text("불일치")
+			$("#pwcch").css("color","red")
+			return false
+		}
+	}
+	$("#name").blur(function(){ /* 이름 확인 */
+		namech();
+	})
+	function namech(){
+		var name=$("#name").val()
+		var reg=/^[가-힣]{2,8}$/ /* 유효성 검사 */
+		
+		if(name==""){
+			$("#namech").text("필수")
+			$("#namech").css("color","red")
+			return false
+		}else if(reg.test(name)){
+			$("#namech").text("확인")
+			$("#namech").css("color","green")
+			return true
+		}else{
+			$("#namech").text("2~8자 한글")
+			$("#namech").css("color","red")
+			return false
+		}
+	}
+	$("#email").blur(function(){ /* 이메일 확인 */
+		emch();
+	})
+	
+	function emch(){
+		var em=$("#email").val();
+		var reg=/([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/ /* 유효성 검사 */
+		if(em==""){
+			$("#emailch").text("필수")
+			$("#emailch").css("color","red")
+			return false;
+		}else if(reg.test(em)){
+			$("#emailch").text("확인")
+			$("#emailch").css("color","green")
+			return true;
+		}else {
+			$("#emailch").text("올바른 이메일 주소")
+			$("#emailch").css("color","red")
+			return false;
+		}
+	}
+	
+	$("#submit").on("click",function(e){
+		var birth=$("#YYYY").val()+$("#MM").val()+$("#DD").val(); /*생년월일 하나로 합치기 */
+		var reg=/^[0-9]+$/
+		if(reg.test(birth)&&idch()&&pwch()&&pwcch()&&namech()&&emch()){ /* 빈칸 및 유효성검사 */
+				$("#birth").val(birth);
+ 				var form=$("#form1");
+			}else{
+				e.preventDefault();
+				idch();
+				pwch();
+				pwcch();
+				namech();
+				emch();
+			}
+	})
+})
 ````
