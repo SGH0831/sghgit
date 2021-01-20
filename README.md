@@ -172,6 +172,110 @@ public class MainController {
 	</select>
 	
 ```
+#### main.js
+
+```js
+$(document).ready(function(){
+
+	img();
+	likes();
+	
+	$("#login_btn").on("click",function(){ /* 로그인 */
+		location.href="/member/login";
+	})
+	
+	$("#logout_btn").on("click",function(){ /* 로그아웃 */
+		alert("로그아웃")
+		location.href="/member/logout"
+	})
+	$("#write").on("click",function(){ /* 글 작성 */
+		location.href="/board/write"
+	})
+	
+	$(".card").on("click",function(){ /* 글 보기 */
+		var bno =$(this).data("bno")
+		location.href="/board/detail?bno="+bno;
+	})
+	
+	$("#search").on("keydown",function(k){ /* 글 검색 엔터 키*/
+		if(k.keyCode==13){
+		var search=$("#search").val()		
+		location.href="/?type=title&keyword="+search
+		}
+	})
+	
+	$("#searchbtn").on("click",function(){ /* 글 검색 검색 버튼 */
+		var search=$("#search").val()		
+		location.href="/?type=title&keyword="+search
+		
+	})
+	
+	$("#mylike").on("click",function(){ /* 나의 추천 글 */
+		location.href="/board/likes"
+	})
+	function img(){ /* 썸네일 */
+	$("#contents .card").each(function(){
+		var bno=$(this).data("bno")
+		var ob=$(this)
+		$.getJSON("/br/"+bno+".json",function(data){
+			var callpath=encodeURIComponent(data.uploadpath+"/S_"+data.uuid+"_"+data.filename)
+			ob.find("img").attr("src","/br/display?filename="+callpath )
+			})
+		})	
+	}
+	
+	function likes(){ /* 해당 글의 추천 수 */
+		$("#contents .card").each(function(){
+		var bno=$(this).data("bno")
+		var ob=$(this)
+		$.getJSON("/br/likenum/"+bno+".json",function(data){
+			ob.find(".likes").html(data)
+		})
+		})
+	}	
+})
+```
+
+### 로그인
+#### MemberController.java
+```java
+	@GetMapping("/login") // 로그인 창으로
+	public void login() {
+		
+	}
+	@PostMapping("/login") // 로그인 post
+	public String login2(MemberDTO dto,HttpSession session,RedirectAttributes rttr) {
+		MemberDTO user = sv.login(dto);
+		if(user!=null) {
+			session.setAttribute("user",user); // 회원정보 session저장
+			return "redirect:/";
+		}else {
+			rttr.addFlashAttribute("msg", "로그인 실패");
+			return "redirect:/member/login";
+		}
+	}
+	@GetMapping("/logout") // 로그아웃
+	public String logout(HttpSession session) {
+		session.invalidate(); //session 
+		return "redirect:/";
+	}
+```
+####
+```java
+	public MemberDTO login(MemberDTO dto); //로그인 
+```
+####
+```java
+
+```
+####
+```java
+
+```
+####
+```xml
+
+```
 
 ### 5.1 홈 관련
 #### MainController.java
