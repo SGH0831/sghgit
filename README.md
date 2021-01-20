@@ -8,15 +8,13 @@
 - 4 DB 설계
 - 5 기술 상세
 
-### 1 기획의도
----
+## 1 기획의도
 
 <img src="https://user-images.githubusercontent.com/77423948/105108845-87b65a80-5afe-11eb-8eeb-1e15fc56dec5.jpg" width="400" >  
 
   
 
-### 2 개발 환경
----
+## 2 개발 환경
 
   OS:window10  
   IDE:Eclipse  
@@ -27,16 +25,15 @@
   ORM:MyBatis  
   
   
-### 3 UI 설계
----
+## 3 UI 설계
 
 
-### 4 DB 설계
----
+## 4 DB 설계
 
+## 5 기술 상세
 
-### 5 기술 상세
----
+### 5.1 게시판 관련
+#### BoardController.java 
 ```java
 package org.SGH.controller;
 
@@ -108,4 +105,4 @@ public class BoardController {
 	
 }
 ```
-BoardController.java 
+
