@@ -751,6 +751,7 @@ $(document).ready(function(){
 	}	
 })
 ```
+
 #### write.js 
 ```js
 $(document).ready(function(){
@@ -807,6 +808,7 @@ $(document).ready(function(){
 	})
 })
 ```
+
 #### detail.js 
 ```js
 $(document).ready(function(){
@@ -830,7 +832,7 @@ $(document).ready(function(){
 	$("#write").on("click",function(){ /* 글쓰기 */
 		location.href="/board/write"
 	})
-	$("#mylike").on("click",function(){ /* 추천 */
+	$("#mylike").on("click",function(){ /*  나의 추천 글  */
 		location.href="/board/likes"
 	})
 	$("#menu").on("click",function(){ /* 홈 */
@@ -974,18 +976,139 @@ $(document).ready(function(){
 				}
 			})
 		}else{
-		
 		}
 	}
-	
 })
 ```
-####
+
+#### modify.js 
 ```js
+$(document).ready(function(){
+	
+	var bno=$("#bno").val();	
+	$("#category option").each(function(){ /* selected 적용 */
+		if($(this).val()==$("#cate").val()){
+			$(this).attr("selected","selected")
+		}
+	})
+	img();	
+	function img(){ /* 이미지 가져오기 */
+		$.getJSON("/br/"+bno+".json",function(data){
+			var callpath=encodeURIComponent(data.uploadpath+"/"+data.uuid+"_"+data.filename)
+			$("#img").attr("src","/br/display?filename="+callpath )
+		})
+	}	
+	
+	$("input[type='submit']").on("click",function(e){ /* 글 수정 */
+		var form =$("form")
+		e.preventDefault();
+		
+		if($("#title").val()!="" && $("#content").val()!=""&&$("#material").val()!=null){ /* 빈 값 확인 */
+			if($("#file").val()!=""){
+				$.ajax({ /* 첨부 파일 삭제 */
+					url:"/br/delete"
+					,type:"delete",
+					datatype:"json",
+					contentType:"application/json; charset=utf-8",
+					async:false,
+					data:JSON.stringify({bno:bno}),
+					success:function(){
+						var formdata=new FormData();
+						var file=$("#file")
+						var files=file[0].files;
+						formdata.append("uploadfile",files[0])
+						console.log(formdata);
+						$.ajax({ /* 첨부파일 업로드 */
+							url:"/br/action"
+							,type:"post",
+							datatype:"json",
+							async:false,
+							processData:false,
+							contentType:false,
+							data:formdata,
+							success:function(e){
+								var str="";
+								str+="<input type='hidden' name=attach.filename value='"+e.filename+"'>"
+								str+="<input type='hidden' name=attach.uuid value='"+e.uuid+"'>"
+								str+="<input type='hidden' name=attach.uploadpath value='"+e.uploadpath+"'>"
+								form.append(str).submit();
+							},error:function(){
+							}
+						})
+					},error:function(){
+					}
+				})
+			}
+			form.submit();
+		}
+		e.preventDefault();
+	})
+	$("#file").change(function(){ /* 이미지 미리보기 */
+		if($("#file").val()==""){
+			$("#img").removeAttr("src");			
+		}else{
+		var file=$("#file")
+		var files=file[0].files;
+		var reg=/.(jpg|bmp|png|jpeg|gif)$/;
+		console.log(files)
+		
+		if(reg.test(file.val())){
+			$("input[type='submit']").attr("disabled",false)
+			var reader =new FileReader();
+			reader.onload=function(e){
+				$("#img").attr("src",e.target.result)
+			}
+			reader.readAsDataURL(files[0]);
+		}else{
+			alert("이미지 파일만 가능합니다")
+			$("input[type='submit']").attr("disabled",true);
+		}
+		}
+	})	
+})
 ```
-####
+
+#### likes.js 
 ```js
+$(document).ready(function(){
+	img();
+	likes();
+	$("#login_btn").on("click",function(){ /* 로그인 */
+		location.href="/member/login";
+	})
+	$("#logout_btn").on("click",function(){ /* 로그아웃 */
+		alert("로그아웃")
+		location.href="/member/logout"
+	})
+	$("#write").on("click",function(){ /* 글쓰기 */
+		location.href="/board/write"
+	})
+	$("#mylike").on("click",function(){ /* 나의 추천 글 */
+		location.href="/board/likes"
+	})
+	$(".card").on("click",function(){ /* 글 보기 */
+		var bno =$(this).data("bno")
+		location.href="/board/detail?bno="+bno;
+	})	
+	function likes(){  /* 해당 글 추천 수 */
+		$("#contents .card").each(function(){
+		var bno=$(this).data("bno")
+		var ob=$(this)
+		$.getJSON("/br/likenum/"+bno+".json",function(data){
+			ob.find(".likes").html(data)
+		})
+		})
+	}	
+	function img(){ /* 썸네일 */
+	$("#contents .card").each(function(){
+		var bno=$(this).data("bno")
+		var ob=$(this)
+		$.getJSON("/br/"+bno+".json",function(data){
+			var callpath=encodeURIComponent(data.uploadpath+"/S_"+data.uuid+"_"+data.filename)
+			ob.find("img").attr("src","/br/display?filename="+callpath )
+			})
+		})	
+	}	
+})
 ```
-####
-```js
-```
+
