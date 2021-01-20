@@ -10,6 +10,8 @@
 
 ### 1 기획의도
 ---
+<img src="https://user-images.githubusercontent.com/77423948/105108845-87b65a80-5afe-11eb-8eeb-1e15fc56dec5.jpg" width="350" height="350px">
+  1인가구
 
 ### 2 개발 환경
 ---
