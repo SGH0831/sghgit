@@ -51,17 +51,17 @@
 - [홈 화면](#홈-화면) 
 - [로그인](#로그인)
 - [회원가입](#회원가입)  
-	-[중복확인](#중복확인)
-	-[유효성 검사](#유효성 검사)
-- [아이디,비밀번호 찾기]
-- [회원수정]
-- 글 작성 
-- 글 수정
-- 글 삭제
-- 추천
-- 댓글 작성
-- 댓글 수정
-- 댓글 삭제
+	- [중복확인](#중복확인)
+	- [유효성 검사](#유효성-검사)
+- [아이디,비밀번호 찾기](#아이디,비밀번호 찾기)
+- [회원정보수정](#회원정보수정)
+- [글 작성](#글-작성)
+- [글 수정](#글-수정)
+- [글 삭제](#글-삭제)
+- [추천](#추천)
+- [댓글 작성](#댓글-작성)
+- [댓글 수정](#댓글-수정)
+- [댓글 삭제](#댓글-삭제)
 
 
 
@@ -363,7 +363,7 @@ $(document).ready(function(){
 	}
 ```
 
-####
+#### MemberRestController.java
 ```java
 	@RequestMapping(value="/{id}",method = RequestMethod.GET) //아이디 중복 확인 
 	public int signcheck(@PathVariable("id")String id){
@@ -372,24 +372,24 @@ $(document).ready(function(){
 	}
 ```
 
-####
+#### MemberService.java
 ```java
 	public int idch(String id); //아이디 중복 확인
 ```
 
-####
+#### MemberServiceIpml.java
 ```java
 	public int idch(String id) { //아이디 중복 확인
 		return mm.idch(id);
 	}
 ```
 
-####
+#### MemberMapper.java
 ```java
 	public int idch(String id); //아이디 중복 확인
 ```
 
-####
+#### MemberMapper.xml
 ```xml
  	<!-- 아이디 중복확인 -->
 	<select id="idch" resultType="int">
