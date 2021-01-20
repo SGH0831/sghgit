@@ -12,8 +12,8 @@
 	* 5.2 게시판 관련
 		* 5.2.1 Controller
 		* 5.2.2 Service
-		* 5.2.3 Mapper(Java)
-		* 5.2.4 Mapper(XML)
+		* 5.2.3 Mapper
+
 ## 1 기획의도
 
 <img src="https://user-images.githubusercontent.com/77423948/105108845-87b65a80-5afe-11eb-8eeb-1e15fc56dec5.jpg" width="400" >  
@@ -399,7 +399,7 @@ public class BoardServiceIpml implements BoardService{
 	public ArrayList<BoardDTO> getlist(Criteria cri) { //게시글 목록
 		return bm.getlist(cri);
 	}
-	public int total(Criteria cri) { //게시글 총수
+	public int total(Criteria cri) { //게시글 수
 		return bm.total(cri);
 	}
 	
@@ -465,5 +465,52 @@ public class BoardServiceIpml implements BoardService{
 	public int likenum(int bno) { //해당 글의 추천수
 		return bm.likenum(bno);
 	}
+}
+```
+
+### 5.2.3 Mapper
+
+#### BoardMapper.java
+```java
+package org.SGH.mapper;
+
+import java.util.ArrayList;
+
+import org.SGH.DTO.BoardAttachDTO;
+import org.SGH.DTO.BoardDTO;
+import org.SGH.DTO.Criteria;
+import org.SGH.DTO.LikesDTO;
+import org.SGH.DTO.MemberDTO;
+import org.SGH.DTO.replyDTO;
+import org.apache.ibatis.annotations.Param;
+
+public interface BoardMapper {
+	//MainController
+	public ArrayList<BoardDTO> getlist(Criteria cri); //게시글 목록
+	public int total(Criteria cri); //게시글 수
+	
+	//BoardController
+	public void write(BoardDTO dto);  //게시글 작성
+	public void insert(BoardAttachDTO dto); //파일업로드
+	public BoardDTO detail(BoardDTO dto); //게시글 보기
+	public void hits(BoardDTO dto); //조회수 증가
+	public void modify(BoardDTO dto); //게시글 수정
+	public void delete(BoardDTO dto); //게시글 삭제
+	public ArrayList<BoardDTO> mylikes(@Param("cri")Criteria cri,@Param("dto")MemberDTO dto);  //내가 추천 한 글 목록
+	public int liketotal(@Param("cri") Criteria cri,@Param("dto") MemberDTO dto); //내가 추천 한 글 수
+	
+	//replyController
+	public ArrayList<replyDTO> list(int bno); //댓글 목록
+	public int rewrite(replyDTO dto); //댓글 작성
+	public int remodify(replyDTO dto); //댓글 수정
+	public int redelete(replyDTO dto); //댓글 삭제
+	
+	//BoardRestController
+	public BoardAttachDTO getimg(int bno); //해당 글의 이미지 가져오기
+	public int attdelete(BoardAttachDTO dto); //해당 글의 이미지 삭제
+	public int likes(LikesDTO dto); //해당 글의 나의 추천상태 확인
+	public int likesadd(LikesDTO dto); //추천 추가
+	public int likedel(LikesDTO dto); //추천 취소
+	public int likenum(int bno); //해당 글의 추천수
 }
 ```
