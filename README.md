@@ -50,7 +50,10 @@
 ## 5 기술 상세
 - [홈 화면](#홈-화면) 
 - [로그인](#로그인)
-- [회원가입](#회원가입) 
+- [회원가입](#회원가입)  
+	-[중복확인](#중복확인)
+	-[유효성 검사](#유효성 검사)
+- [아이디,비밀번호 찾기]
 - [회원수정]
 - 글 작성 
 - 글 수정
@@ -311,9 +314,9 @@ $(document).ready(function(){
  		insert into user (id,pw,name,birth,gender,email) values(#{id},#{pw},#{name},#{birth},#{gender},#{email})
  	</insert>
 ```
-가입시 중복 확인
+### 중복확인
 
-####
+#### signup.js 
 ```js
 	$("#id").blur(function(){  /* 아이디 확인 */
 		idch();
