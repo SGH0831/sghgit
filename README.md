@@ -12,6 +12,7 @@
 ---
 
 <img src="https://user-images.githubusercontent.com/77423948/105108845-87b65a80-5afe-11eb-8eeb-1e15fc56dec5.jpg" width="350" height="350px">  
+
   1인가구가 매년 증가하는 추세이다  
   혼자서 간단하게 밥을 챙겨 먹을수 있는 자신만의 요리법을 공유하는 게시판형 사이트를 만들었다.  
 
