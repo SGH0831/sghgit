@@ -373,7 +373,7 @@ public interface BoardService {
 }
 ```
 
-####
+#### BoardServiceIpml.java
 
 ```java
 package org.SGH.Service;
@@ -395,93 +395,74 @@ public class BoardServiceIpml implements BoardService{
 	@Autowired
 	private BoardMapper bm;
 	
-	//main
-	//게시글 보기
-	public ArrayList<BoardDTO> getlist(Criteria cri) {
+	//MainController
+	public ArrayList<BoardDTO> getlist(Criteria cri) { //게시글 목록
 		return bm.getlist(cri);
 	}
-	//게시글 총수
-	public int total(Criteria cri) {
+	public int total(Criteria cri) { //게시글 총수
 		return bm.total(cri);
 	}
 	
-	//board
-	//게시글 작성
-	public void write(BoardDTO dto) {
+	//BoardController
+	public void write(BoardDTO dto) { //게시글 작성
 		bm.write(dto);
 		dto.getAttach().setBno(dto.getBno());
 		bm.insert(dto.getAttach());		
 	}
-	//게시글 보기
-	public BoardDTO detail(BoardDTO dto) {
+	public BoardDTO detail(BoardDTO dto) { //게시글 보기
 		return bm.detail(dto);
 	}
-	//조회수 증가
-	public void hits(BoardDTO dto) {
+	public void hits(BoardDTO dto) { //조회수 증가
 		bm.hits(dto);
 	}
-	//게시글 수정
-	public void modify(BoardDTO dto) {
+	public void modify(BoardDTO dto) { //게시글 수정
 		bm.modify(dto);
 		if(dto.getAttach()!=null) {
 			dto.getAttach().setBno(dto.getBno());
 			bm.insert(dto.getAttach());		
 		}
 	}
-	//게시글 삭제
-	public void delete(BoardDTO dto) {
+	public void delete(BoardDTO dto) { //게시글 삭제
 		bm.delete(dto);
 	}
-	//나의 추천글 보기
-	public ArrayList<BoardDTO> mylikes(Criteria cri,MemberDTO dto) {
+	public ArrayList<BoardDTO> mylikes(Criteria cri,MemberDTO dto) { //내가 추천 한 글 목록
 		return bm.mylikes(cri,dto);
 	}
-	//나의 추천글 총수
-	public int liketotal(Criteria cri, MemberDTO dto) {
+	public int liketotal(Criteria cri, MemberDTO dto) { //내가 추천 한 글 수
 		return bm.liketotal(cri, dto);
 	}
 	
-	//Reply
-	//댓글 보기
-	public ArrayList<replyDTO> list(int bno) {
+	//replyController
+	public ArrayList<replyDTO> list(int bno) { //댓글 목록
 		return bm.list(bno);
 	}
-	//댓글 작성
-	public int rewrite(replyDTO dto) {
+	public int rewrite(replyDTO dto) { //댓글 작성
 		return bm.rewrite(dto);
 	}
-	//댓글 수정
-	public int remodify(replyDTO dto) {
+	public int remodify(replyDTO dto) { //댓글 수정
 		return bm.remodify(dto);
 	}
-	//댓글 삭제
-	public int redelete(replyDTO dto) {
+	public int redelete(replyDTO dto) { //댓글 삭제
 		return bm.redelete(dto);
 	}
 	
-	//boardRest
-	//첨부사진 이미지 경로 가져오기
-	public BoardAttachDTO getimg(int bno) {
+	//BoardRestController
+	public BoardAttachDTO getimg(int bno) { //해당 글의 이미지 가져오기
 		return bm.getimg(bno);
 	}
-	//첨부사진 삭제
-	public int attdelete(BoardAttachDTO dto) {
+	public int attdelete(BoardAttachDTO dto) { //해당 글의 이미지 삭제
 		return bm.attdelete(dto);
 	}
-	//추천상태 확인
-	public int likes(LikesDTO dto) {
+	public int likes(LikesDTO dto) { //해당 글의 나의 추천상태 확인
 		return bm.likes(dto);
 	}
-	//추천 추가
-	public int likesadd(LikesDTO dto) {
+	public int likesadd(LikesDTO dto) { //추천 추가
 		return bm.likesadd(dto);
 	}
-	//추천 삭제
-	public int likedel(LikesDTO dto) {
+	public int likedel(LikesDTO dto) { //추천 취소
 		return bm.likedel(dto);
 	}
-	//추천 수
-	public int likenum(int bno) {
+	public int likenum(int bno) { //해당 글의 추천수
 		return bm.likenum(bno);
 	}
 }
