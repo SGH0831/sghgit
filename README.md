@@ -13,7 +13,11 @@
 		* 5.2.1 Controller
 		* 5.2.2 Service
 		* 5.2.3 Mapper
-
+		* 5.2.4 Js
+	* 5.3 사용자 관련
+		* 5.3.1 Controller
+		* 5.3.2 Service
+		* 5.3.3 Mapper
 ## 1 기획의도
 
 <img src="https://user-images.githubusercontent.com/77423948/105108845-87b65a80-5afe-11eb-8eeb-1e15fc56dec5.jpg" width="400" >  
@@ -680,4 +684,326 @@ public interface BoardMapper {
 		select count(*) from likes where bno=#{bno}
 	</select>
 </mapper>
+```
+
+### 5.2.4 Js
+
+#### main.js
+
+```js
+$(document).ready(function(){
+
+	img();
+	likes();
+	
+	$("#login_btn").on("click",function(){ /* 로그인 */
+		location.href="/member/login";
+	})
+	
+	$("#logout_btn").on("click",function(){ /* 로그아웃 */
+		alert("로그아웃")
+		location.href="/member/logout"
+	})
+	$("#write").on("click",function(){ /* 글 작성 */
+		location.href="/board/write"
+	})
+	
+	$(".card").on("click",function(){ /* 글 보기 */
+		var bno =$(this).data("bno")
+		location.href="/board/detail?bno="+bno;
+	})
+	
+	$("#search").on("keydown",function(k){ /* 글 검색 엔터 키*/
+		if(k.keyCode==13){
+		var search=$("#search").val()		
+		location.href="/?type=title&keyword="+search
+		}
+	})
+	
+	$("#searchbtn").on("click",function(){ /* 글 검색 검색 버튼 */
+		var search=$("#search").val()		
+		location.href="/?type=title&keyword="+search
+		
+	})
+	
+	$("#mylike").on("click",function(){ /* 나의 추천 글 */
+		location.href="/board/likes"
+	})
+	function img(){ /* 썸네일 */
+	$("#contents .card").each(function(){
+		var bno=$(this).data("bno")
+		var ob=$(this)
+		$.getJSON("/br/"+bno+".json",function(data){
+			var callpath=encodeURIComponent(data.uploadpath+"/S_"+data.uuid+"_"+data.filename)
+			ob.find("img").attr("src","/br/display?filename="+callpath )
+			})
+		})	
+	}
+	
+	function likes(){ /* 해당 글의 추천 수 */
+		$("#contents .card").each(function(){
+		var bno=$(this).data("bno")
+		var ob=$(this)
+		$.getJSON("/br/likenum/"+bno+".json",function(data){
+			ob.find(".likes").html(data)
+		})
+		})
+	}	
+})
+```
+#### write.js 
+```js
+$(document).ready(function(){
+	$("#file").change(function(){ /* 이미지 미리 보기 */
+		if($("#file").val()==""){
+			$("#img").removeAttr("src");			
+		}else{
+		var file=$("#file") /* 첨부된 파일 */
+		var files=file[0].files;
+		var reg=/.(jpg|bmp|png|jpeg|gif)$/; /* 확장자 확인 */
+		console.log(files)
+		
+		if(reg.test(file.val())){ /* 확장자 확인 */
+			$("input[type='submit']").attr("disabled",false)
+			var reader =new FileReader();
+			reader.onload=function(e){
+				$("#img").attr("src",e.target.result)
+			}
+			reader.readAsDataURL(files[0]);
+		}else{
+			alert("이미지 파일만 가능합니다")
+			$("input[type='submit']").attr("disabled",true);
+		}
+		}
+	})
+	
+	$("input[type='submit']").on("click",function(e){  /* 글쓰기 파일등록 */
+		var form =$("form") /* form */
+		e.preventDefault();
+		if($("#title").val()!="" && $("#content").val()!=""&&$("#file").val()!=null&&$("#material").val()!=null){ /* null확인 */
+			var formdata=new FormData();
+			var file=$("#file")
+			var files=file[0].files;
+			formdata.append("uploadfile",files[0])
+			console.log(formdata);
+			$.ajax({ /* 이미지 업로드 */
+				url:"/br/action"
+				,type:"post",
+				datatype:"json",
+				processData:false,
+				contentType:false,
+				data:formdata,
+				success:function(e){
+					var str="";
+					str+="<input type='hidden' name=attach.filename value='"+e.filename+"'>" /* 업로드 파일 정보 저장 */
+					str+="<input type='hidden' name=attach.uuid value='"+e.uuid+"'>"
+					str+="<input type='hidden' name=attach.uploadpath value='"+e.uploadpath+"'>"
+					form.append(str).submit();
+				},error:function(){
+				}
+			})
+		}
+		e.preventDefault();
+	})
+})
+```
+#### detail.js 
+```js
+$(document).ready(function(){
+	img();
+	likes();	
+	replylist();
+	
+	/*이미지 가져오기*/
+	function img(){
+		$.getJSON("/br/"+bno+".json",function(data){
+			var callpath=encodeURIComponent(data.uploadpath+"/"+data.uuid+"_"+data.filename)
+			$("#img").attr("src","/br/display?filename="+callpath )
+		})
+	}	
+	/*로그인*/
+	$("#login_btn").on("click",function(){
+		location.href="/member/login";
+	})
+	/*로그아웃*/
+	$("#logout_btn").on("click",function(){
+		alert("로그아웃")
+		location.href="/member/logout"
+	})
+	/*글쓰기*/
+	$("#write").on("click",function(){
+		location.href="/board/write"
+	})
+	/*추천*/
+	$("#mylike").on("click",function(){
+		location.href="/board/likes"
+	})
+	/*홈*/
+	$("#menu").on("click",function(){
+		location.href="/main/"
+	})
+	/*댓글 쓰기*/
+	$("#rebutton").on("click",function(){
+		if(id!=""){
+		var reply_writer =id;
+		var reply_content =$("#replytext").val();
+		$.ajax({
+			url:"/reply/write",
+			type:"post",
+			contentType:"application/json; charset=utf-8",
+			data:JSON.stringify({bno:bno,reply_writer:reply_writer,reply_content:reply_content}),
+			success:function(data){
+				$("#replytext").html("")
+				replylist();
+			},error:function(){
+				alert("에러")
+			}
+		})		
+		}else{
+			alert("로그인필요")
+		}	
+	})
+	/*댓글 리스트*/
+	function replylist(){
+		var str="";
+		$.getJSON("/reply/"+bno+".json",function(data){
+			$(data).each(function(){
+				str+="<li class='border' data-rno='"+this.rno+"'><p class='re_writer fw-bold'>"+this.reply_writer+"</p><p class='re_content'>"+this.reply_content+"</p>"
+				if(id==this.reply_writer){
+				str+="<p><button class='remodi btn btn-success'>수정</button>  <button class='redel btn btn-success'>삭제</button></p></li>"
+				}
+			})
+			$("#replies").html(str)
+		})
+	}
+		
+	
+	/*글 수정*/
+	$("#modify").on("click",function(){
+		location.href="/board/modify?bno="+bno		
+	})	
+	
+	/*글 삭제*/
+	$("#delete").on("click",function(){
+		var form = $("#form")
+		form.attr("action","/board/delete")
+		form.attr("method","post")
+		form.submit();
+	})	
+	
+	
+	/*댓글수정*/
+	$("#replies").on("click",".remodi",function(){
+		var rno=$(this).parents("li").data("rno")
+		var text=$(this).parent().prev(".re_content").html();
+		$(this).parents("li").replaceWith("<textarea data-rno='"+rno+"' class='modiarea' maxlength='100'>"+text+"</textarea><div><button class='modisub btn btn-success'>확인</button><button class='modican  btn btn-success'>취소</button></div>");
+	})
+		
+	/*댓글수정 확인*/
+	$("#replies").on("click",".modisub",function(){
+		var rno=$(this).parent().prev("textarea").data("rno")
+		var reply_content=$(this).parent().prev("textarea").val();
+		$.ajax({
+				url:"/reply/modify",
+				type:"put",
+				contentType:"application/json; charset=utf-8",
+				data:JSON.stringify({rno:rno,reply_content:reply_content}),
+				success:function(){
+					replylist();
+				},error:function(){
+				}
+		})
+	})	
+	/*댓글수정 취소*/
+	$("#replies").on("click",".modican",function(){
+		replylist();
+	})	
+	/*댓글 수정*/
+	$("#replies").on("click",".redel",function(){
+		var rno=$(this).parents("li").data("rno")
+		$.ajax({
+				url:"/reply/delete",
+				type:"delete",
+				contentType:"application/json; charset=utf-8",
+				data:JSON.stringify({rno:rno}),
+				success:function(){
+					replylist();
+				},error:function(){
+				}
+		})
+	})
+	/*추천*/
+	$("#likesbox").on("click",function(){
+		if(id!=null&&id!=''){
+			$.ajax({
+				url:"/br/likes",
+				type:"post",
+				contentType:"application/json; charset=utf-8",
+				data:JSON.stringify({bno:bno,id:id}),
+				async:false,
+				success:function(result){
+					if(result==1){
+						$.ajax({
+							url:"/br/likesdel",
+							type:"delete",
+							async:false,
+							contentType:"application/json; charset=utf-8",
+							data:JSON.stringify({bno:bno,id:id}),
+							success:function(){
+								likes()
+							},error:function(){
+							}
+						})
+					}else{
+						$.ajax({
+							url:"/br/likesadd",
+							type:"put",
+							async:false,
+							contentType:"application/json; charset=utf-8",
+							data:JSON.stringify({bno:bno,id:id}),
+							success:function(){
+								likes()
+							},error:function(){
+							}
+						})
+					}
+				},error:function(){
+				}
+			})
+		}else{
+			alert("로그인 필요")
+		}
+	})
+	
+	/*추천 확인*/
+	function likes(){
+		if(id!=null&&id!=''){
+			$.ajax({
+				url:"/br/likes",
+				type:"post",
+				contentType:"application/json; charset=utf-8",
+				data:JSON.stringify({bno:bno,id:id}),
+				success:function(result){
+					if(result==1){
+						$("#likesbox").html("추천취소")
+					}else{
+						$("#likesbox").html("추천")
+					}
+				}
+			})
+		}else{
+		
+		}
+	}
+	
+})
+```
+####
+```js
+```
+####
+```js
+```
+####
+```js
 ```
