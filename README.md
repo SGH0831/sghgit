@@ -60,7 +60,7 @@
 
 ## 5 기술 상세
 - [홈 화면](#홈-화면) 
-- 로그인
+- [로그인](#)
 - 회원가입 
 - 글 작성 
 - 글 수정
@@ -264,21 +264,26 @@ $(document).ready(function(){
 		return "redirect:/";
 	}
 ```
-####
+#### MemberService.java
 ```java
 	public MemberDTO login(MemberDTO dto); //로그인 
 ```
-####
+#### MemberServiceIpml.java
 ```java
-
+	public MemberDTO login(MemberDTO dto) { //로그인
+		return mm.login(dto);
+	}
 ```
-####
+####  MemberMapper.java
 ```java
-
+	public MemberDTO login(MemberDTO dto); //로그인
 ```
-####
+####  MemberMapper.xml
 ```xml
-
+	<!-- 회원가입-->
+ 	<insert id="add">
+ 		insert into user (id,pw,name,birth,gender,email) values(#{id},#{pw},#{name},#{birth},#{gender},#{email})
+ 	</insert>
 ```
 
 ### 5.1 홈 관련
