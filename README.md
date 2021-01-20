@@ -6,10 +6,14 @@
 - 개발 환경
 - UI 설계
 - DB 설계
-- 기술 상세  
+- 기술 상세
   - 홈 관련
-   - Controller
+    - Controller
   - 게시판 관련
+    - Controller
+    - Service
+    - Mapper(Java)
+    - Mapper(XML)
 ## 1 기획의도
 
 <img src="https://user-images.githubusercontent.com/77423948/105108845-87b65a80-5afe-11eb-8eeb-1e15fc56dec5.jpg" width="400" >  
