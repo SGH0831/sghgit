@@ -21,8 +21,8 @@
 ## 1 기획의도
 
 <img src="https://user-images.githubusercontent.com/77423948/105108845-87b65a80-5afe-11eb-8eeb-1e15fc56dec5.jpg" width="400" >  
-
-  
+1인가구가 계속 증가하는 추세이다  
+각자의 요리법을 공유하여 끼니를 거르지 말자..
 
 ## 2 개발 환경
 
