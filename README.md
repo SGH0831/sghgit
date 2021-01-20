@@ -43,6 +43,8 @@
   
 ## 3 UI 설계
 
+<img src="https://user-images.githubusercontent.com/77423948/105132821-e98eb880-5b2e-11eb-9e3e-2e04267932b9.PNG">
+
 
 ## 4 DB 설계
 **board**  
