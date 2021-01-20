@@ -1112,3 +1112,172 @@ $(document).ready(function(){
 })
 ```
 
+### 5.3 사용자 관련
+### Controller
+#### MemberController.java
+```java
+package org.SGH.controller;
+
+
+import javax.servlet.http.HttpSession;
+
+import org.SGH.DTO.MemberDTO;
+import org.SGH.Service.MemberService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+
+@Controller
+@RequestMapping("/member")
+public class MemberController {
+	
+	@Autowired
+	private MemberService sv;
+	
+	
+	@GetMapping("/login") // 로그인 창으로
+	public void login() {
+		
+	}
+	@PostMapping("/login") // 로그인 post
+	public String login2(MemberDTO dto,HttpSession session,RedirectAttributes rttr) {
+		MemberDTO user = sv.login(dto);
+		if(user!=null) {
+			session.setAttribute("user",user); // 회원정보 session저장
+			return "redirect:/";
+		}else {
+			rttr.addFlashAttribute("msg", "로그인 실패");
+			return "redirect:/member/login";
+		}
+	}
+	@GetMapping("/logout") // 로그아웃
+	public String logout(HttpSession session) {
+		session.invalidate(); //session 
+		return "redirect:/";
+	}
+	
+ 	@GetMapping("/sign_up") //회원가입 창으로
+	public void signup() {
+		
+	}
+	@PostMapping("/sign_up") //회원가입
+	public String signup2(MemberDTO dto) {
+		sv.add(dto);
+		return "redirect:/member/login";
+	}
+	
+	@GetMapping("/find_id") //아이디 찾기 페이지로
+	public void gfind_id() {
+	}
+	
+	@GetMapping("/find_pw") //비밀번호 찾기 페이지로
+	public void gfind_pw() {
+		
+	}
+	
+	@GetMapping("/detail") //개인정보 페이지로
+	public void detail() {
+		
+	}
+	@PostMapping("/modify") //비밀번호 변경
+	public String modify(MemberDTO dto,HttpSession session) {
+		sv.modify(dto);
+		session.invalidate(); 
+		return"redirect:/member/login";
+	}
+	@PostMapping("/delete") //회원 탈퇴
+	public String delete(MemberDTO dto,HttpSession session) {
+		sv.delete(dto);
+		session.invalidate();
+		return "redirect:/";
+	}
+
+}
+```
+#### MemberRestController.java
+```java
+package org.SGH.controller;
+
+import javax.mail.internet.MimeMessage;
+
+import org.SGH.DTO.MemberDTO;
+import org.SGH.Service.MemberService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+
+@RestController
+@RequestMapping("/mr")
+public class MemberRestController {
+	
+	@Autowired
+	private MemberService sv;
+	@Autowired
+	private JavaMailSender mailSender;
+	
+	@RequestMapping(value="/{id}",method = RequestMethod.GET) //아이디 중복 확인 
+	public int signcheck(@PathVariable("id")String id){
+		int result=sv.idch(id);
+		return result;
+	}
+	
+	@PostMapping("/find_id") //아이디 찾기
+	public ResponseEntity<String> findid(@RequestBody MemberDTO dto){
+		return new ResponseEntity<>(sv.find_id(dto).getId(),HttpStatus.OK);
+	}
+	
+	@PostMapping("/find_pw") //비밀번호 찾기
+	public ResponseEntity<String> findpw(@RequestBody MemberDTO dto){
+		MemberDTO mdto=sv.find_id(dto);
+		if(mdto!=null) {
+			String to=mdto.getEmail(); //받는 사람
+			String subject="비밀번호 찾기"; //메일 제목
+			String content="비밀번호는 <<"+mdto.getPw()+">>	 입니다"; //메일 내용
+			try {
+				MimeMessage message = mailSender.createMimeMessage();
+				MimeMessageHelper messageHelper =new MimeMessageHelper(message,true,"UTF-8");
+				messageHelper.setFrom("보내는 사람");
+				messageHelper.setTo(to);
+				messageHelper.setSubject(subject);
+				messageHelper.setText(content);
+				mailSender.send(message); //메세지 보내기
+				} catch (Exception e) {
+					e.printStackTrace();
+			}
+		}
+		return new ResponseEntity<>("success",HttpStatus.OK);
+	}
+}
+```
+### Service
+#### MemberService.java
+```java
+
+```
+#### MemberServiceIpml.java
+```java
+```
+### Mapper
+#### MemberMapper.java
+```java
+```
+#### MemberMapper.xml
+```xml
+```
+### js
+####
+````js
+````
