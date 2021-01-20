@@ -31,8 +31,35 @@
 ## 4 DB 설계
 
 ## 5 기술 상세
+### 5.1 홈 관련
+#### MainController.java
+```java
+package org.SGH.controller;
 
-### 5.1 게시판 관련
+import org.SGH.DTO.Criteria;
+import org.SGH.DTO.pageDTO;
+import org.SGH.Service.BoardService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+public class MainController {
+	@Autowired
+	private BoardService sv;
+	
+	@RequestMapping(value="/", method=RequestMethod.GET) //홈
+	public String main(Model model,Criteria cri) {
+		model.addAttribute("list", sv.getlist(cri)); //글 목록
+		model.addAttribute("page",new pageDTO(cri,sv.total(cri))); //페이징
+		return "main";
+	}
+}
+
+```
+### 5.2 게시판 관련
 #### BoardController.java 
 ```java
 package org.SGH.controller;
@@ -106,6 +133,7 @@ public class BoardController {
 }
 ```
 
+#### BoardRestController.java
 ```java
 package org.SGH.controller;
 
@@ -237,4 +265,57 @@ public class BoardRestController {
 	
 }
 ```
+#### ReplyController.java 
+```java
+package org.SGH.controller;
 
+import java.util.ArrayList;
+
+import org.SGH.DTO.replyDTO;
+import org.SGH.Service.BoardService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/reply")
+public class ReplyController {
+	@Autowired
+	private BoardService sv;
+	
+	@PostMapping("/write") //댓글 작성
+	public ResponseEntity<String> rewrite(@RequestBody replyDTO dto){
+		int result=sv.rewrite(dto);
+		return result ==1 ? new ResponseEntity<>("success",HttpStatus.OK)
+				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@GetMapping("/{bno}") //해당글의 댓글 목록
+	public ResponseEntity<ArrayList<replyDTO>> relist(@PathVariable("bno")int bno){
+		return new ResponseEntity<>(sv.list(bno),HttpStatus.OK);
+		
+	}
+	
+	@PutMapping("/modify") //댓글 수정
+	public ResponseEntity<String> modify(@RequestBody replyDTO dto){
+		int result=sv.remodify(dto);
+		return result ==1 ? new ResponseEntity<>("success",HttpStatus.OK)
+				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@DeleteMapping("/delete") //댓글 삭제
+	public ResponseEntity<String> delete(@RequestBody replyDTO dto){
+		int result=sv.redelete(dto);
+		return result ==1 ? new ResponseEntity<>("success",HttpStatus.OK)
+				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+}
+```
