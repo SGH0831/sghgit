@@ -45,6 +45,16 @@
 
 
 ## 4 DB 설계
+#### board
+  <img src="https://user-images.githubusercontent.com/77423948/105127601-9283e600-5b24-11eb-8834-9a202dd12038.PNG">
+#### attach
+  <img src="https://user-images.githubusercontent.com/77423948/105127678-b515ff00-5b24-11eb-9738-97522299e81e.PNG">
+#### reply
+  <img src="https://user-images.githubusercontent.com/77423948/105127700-bfd09400-5b24-11eb-9da6-834ed368fc34.PNG">
+#### likes
+  <img src="https://user-images.githubusercontent.com/77423948/105127726-c9f29280-5b24-11eb-8b38-d9755012f99a.PNG">
+#### user
+  <img src="https://user-images.githubusercontent.com/77423948/105127744-d2e36400-5b24-11eb-81bf-fe1f138872bc.PNG">
 
 ## 5 기술 상세
 ### 5.1 홈 관련
