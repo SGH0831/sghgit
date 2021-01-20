@@ -98,11 +98,15 @@ public class MainController {
 	public int total(Criteria cri); //게시글 수
 	
 ```
-#### BoardRestController.java
+#### BoardServiceIpml.java
 ```java
 	//MainController
 	public ArrayList<BoardDTO> getlist(Criteria cri) { //게시글 목록
 		return bm.getlist(cri);
+	}
+	public int total(Criteria cri) { //게시글 수
+		return bm.total(cri);
+	}
 ```
 
 #### BoardMapper.java
