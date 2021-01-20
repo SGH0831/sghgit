@@ -30,10 +30,16 @@
   IDE:Eclipse  
   Server:Apache tomcat 8.5  
   DB:MySQL  
-  Language:JAVA,JSP,JavaScropt  
+  Language:JAVA,JSP,JavaScropt(jquery)  
   framework:Spring,bootstrap  
   ORM:MyBatis  
-  
+  <img src="https://user-images.githubusercontent.com/77423948/105124624-db846c00-5b1d-11eb-9955-d955587b1156.png" width="40" height="40">
+  <img src="https://user-images.githubusercontent.com/77423948/105126605-7d0dbc80-5b22-11eb-8887-e156ee018c1a.png" width="40" height="40">
+  <img src="https://user-images.githubusercontent.com/77423948/105126629-86972480-5b22-11eb-8b07-a889d011ce45.png" width="40" height="40">
+  <img src="https://user-images.githubusercontent.com/77423948/105126805-dece2680-5b22-11eb-984c-fb84306a77f5.png" width="40" height="40">
+  <img src="https://user-images.githubusercontent.com/77423948/105126585-72532780-5b22-11eb-9cbb-c8f7a3eacc97.png" width="40" height="40">
+  <img src="https://user-images.githubusercontent.com/77423948/105126648-9151b980-5b22-11eb-81bd-e79e213bd53d.png" width="40" height="40">
+  <img src="https://user-images.githubusercontent.com/77423948/105126667-99a9f480-5b22-11eb-92cf-64792537919f.png" width="40" height="40">
   
 ## 3 UI 설계
 
