@@ -501,9 +501,96 @@ $(document).ready(function(){
 	}
 ```
 ### 아이디,비밀번호 찾기
+```js
+$(document).ready(function(){
+	
+	$("#submit").on("click",function(){ /* 아이디 찾기 */
+		var email=$("#email").val()
+		
+		$.ajax({ /* 아이디  */
+			url:"/mr/find_id",
+			type:"post",
+			contentType:"application/json; charset=utf-8",
+			data:JSON.stringify({email:email}),
+			success:function(data){
+				$("#login").empty();
+				$("#result").html("찾으시는 아이디:"+data)
+				$("#login").append("<a href='/member/login'>로그인</a>&nbsp;&nbsp;<a href='/member/find_pw'>비밀번호 찾기</a>")
+			},error:function(){
+				$("#result").html("");
+				alert("이메일을 다시 입력해주세요")
+			}
+			
+		})
+	})
+})
+```
+```js
+$("#submit").on("click",function(){ /*비밀번호 이메일전송*/
+		var email=$("#email").val()
+		
+		$.ajax({ /* 비밀번호 찾기 */
+			url:"/mr/find_pw",
+			type:"post",
+			contentType:"application/json; charset=utf-8",
+			data:JSON.stringify({email:email}),
+			success:function(data){
+				$("resultbox").children("p").remove();
+				$("#result").html("이메일이 전송 되었습니다")
+				$("#resultbox").append("<a href='/member/login'>로그인</a>")
+			},error:function(){
+				alert("이메일을 다시 입력해주세요")
+			}
+			
+		})
+	})
+```
+
 ```java
+	@PostMapping("/find_id") //아이디 찾기
+	public ResponseEntity<String> findid(@RequestBody MemberDTO dto){
+		return new ResponseEntity<>(sv.find_id(dto).getId(),HttpStatus.OK);
+	}
+	
+	@PostMapping("/find_pw") //비밀번호 찾기
+	public ResponseEntity<String> findpw(@RequestBody MemberDTO dto){
+		MemberDTO mdto=sv.find_id(dto);
+		if(mdto!=null) {
+			String to=mdto.getEmail(); //받는 사람
+			String subject="비밀번호 찾기"; //메일 제목
+			String content="비밀번호는 <<"+mdto.getPw()+">>	 입니다"; //메일 내용
+			try {
+				MimeMessage message = mailSender.createMimeMessage();
+				MimeMessageHelper messageHelper =new MimeMessageHelper(message,true,"UTF-8");
+				messageHelper.setFrom("보내는 사람");
+				messageHelper.setTo(to);
+				messageHelper.setSubject(subject);
+				messageHelper.setText(content);
+				mailSender.send(message); //메세지 보내기
+				} catch (Exception e) {
+					e.printStackTrace();
+			}
+		}
+		return new ResponseEntity<>("success",HttpStatus.OK);
+	}
+```
+
+```java
+	public MemberDTO find_id(MemberDTO dto); //아이디 찾기
 ```
 ```java
+	public MemberDTO find_id(MemberDTO dto) { //아이디 찾기
+		return mm.find_id(dto);
+	}
+```
+```java
+	public MemberDTO find_id(MemberDTO dto); //아이디찾기
+```
+```xml
+	<!-- 아이디 찾기 -->
+	<select id="find_id" resultType="org.SGH.DTO.MemberDTO">
+		select * from user where email=#{email}
+	</select>
 ```
 ### 회원정보수정
 ### 글 작성
