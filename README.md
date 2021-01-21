@@ -712,7 +712,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		(title,content,writer,category,material)values(#{title},#{content},#{writer},#{category},#{material})
 	</insert>
 ```
-### 첨부파일
+### 첨부
 ```js
 	$("input[type='submit']").on("click",function(e){  /* 글쓰기 파일등록 */
 		var form =$("form") /* form */
@@ -805,14 +805,45 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 ```
 ### 글 수정
 ```java
+	@PostMapping("/modify") // 글 수정 POST
+	public String modify2(BoardDTO dto) {
+		sv.modify(dto);
+		return "redirect:/board/detail?bno="+dto.getBno(); // 수정한 글 보기
+	}
 ```
 ```java
+	public void modify(BoardDTO dto); //게시글 수정
 ```
 ```java
+	public void modify(BoardDTO dto) { //게시글 수정
+		bm.modify(dto);
+		if(dto.getAttach()!=null) {
+			dto.getAttach().setBno(dto.getBno());
+			bm.insert(dto.getAttach());		
+		}
+	}
 ```
 ```java
+	public void modify(BoardDTO dto); //게시글 수정
 ```
 ```xml
+	<!-- 게시글 수정 -->
+	<update id="modify">
+		update board set title=#{title},content=#{content},category=#{category},material=#{material} where bno=#{bno}
+	</update>
+```
+### 첨부사진 수정
+```js
+```
+```java
+```
+```java
+```
+```java
+```
+```java
+```
+```js
 ```
 ### 글 삭제
 ```java
