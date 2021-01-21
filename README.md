@@ -55,11 +55,12 @@
 	- [중복확인](#중복확인)
 	- [유효성 검사](#유효성-검사)  
 - [아이디,비밀번호 찾기](#아이디-비밀번호-찾기)
-- [회원정보수정](#회원정보수정)
-- [회원탈퇴](#회원탈퇴)
+- [회원정보수정](#회원-정보-수정)
+- [회원탈퇴](#회원-탈퇴)
 - [글 작성](#글-작성)
 	- [첨부사진](#첨부사진)
 - [글 수정](#글-수정)
+	- [첨부사진 수정](#첨부사진-수정)
 - [글 삭제](#글-삭제)
 - [추천](#추천)
 - [댓글 목록](#댓글-목록)
@@ -628,7 +629,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		select * from user where email=#{email}
 	</select>
 ```
-### 회원정보수정
+### 회원 정보 수정
 ```java
 	@PostMapping("/modify") //비밀번호 변경
 	public String modify(MemberDTO dto,HttpSession session) {
@@ -654,16 +655,153 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		update user set pw=#{pw} where id=#{id}
 	</update>
 ```
-### 글 작성
+### 회원 탈퇴
 ```java
+	@PostMapping("/delete") //회원 탈퇴
+	public String delete(MemberDTO dto,HttpSession session) {
+		sv.delete(dto);
+		session.invalidate();
+		return "redirect:/";
+	}
 ```
 ```java
+	public void delete(MemberDTO dto); //회원 탈퇴
+
 ```
 ```java
+	public void delete(MemberDTO dto) { //회원탈퇴
+		mm.delete(dto);
+	}
 ```
 ```java
+	public void delete(MemberDTO dto); //회원 탈퇴
 ```
 ```xml
+	<!-- 회원 탈퇴 -->
+	<delete id="delete">
+		delete from user where id=#{id}
+	</delete>
+```
+### 글 작성
+```java
+	@PostMapping("/write") //글 작성 POST
+	public String pwrite(BoardDTO dto) {
+		sv.write(dto);
+		return "redirect:/board/detail?bno="+dto.getBno(); //작성한 게시글 보기
+	}
+```
+```java
+	public void write(BoardDTO dto); //게시글 작성
+```
+```java
+	//BoardController
+	public void write(BoardDTO dto) { //게시글 작성
+		bm.write(dto);
+		dto.getAttach().setBno(dto.getBno());
+		bm.insert(dto.getAttach());		
+	}
+```
+```java
+	public void write(BoardDTO dto); //게시글 작성
+```
+```xml
+	<!-- BoardController -->
+	<!-- 게시글 작성 -->
+	<insert id="write" useGeneratedKeys="true" keyProperty="bno">
+		insert into board
+		(title,content,writer,category,material)values(#{title},#{content},#{writer},#{category},#{material})
+	</insert>
+```
+### 첨부파일
+```js
+	$("input[type='submit']").on("click",function(e){  /* 글쓰기 파일등록 */
+		var form =$("form") /* form */
+		e.preventDefault();
+		if($("#title").val()!="" && $("#content").val()!=""&&$("#file").val()!=null&&$("#material").val()!=null){ /* null확인 */
+			var formdata=new FormData();
+			var file=$("#file")
+			var files=file[0].files;
+			formdata.append("uploadfile",files[0])
+			console.log(formdata);
+			$.ajax({ /* 이미지 업로드 */
+				url:"/br/action"
+				,type:"post",
+				datatype:"json",
+				processData:false,
+				contentType:false,
+				data:formdata,
+				success:function(e){
+					var str="";
+					str+="<input type='hidden' name=attach.filename value='"+e.filename+"'>" /* 업로드 파일 정보 저장 */
+					str+="<input type='hidden' name=attach.uuid value='"+e.uuid+"'>"
+					str+="<input type='hidden' name=attach.uploadpath value='"+e.uploadpath+"'>"
+					form.append(str).submit();
+				},error:function(){
+				}
+			})
+		}
+		e.preventDefault();
+	})
+```
+```java
+
+	@Autowired
+	private BoardService bs;
+	
+	private String getFolder() { //오늘날짜
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+		Date date= new Date();
+		String str=sdf.format(date);
+		return str.replace("-",File.separator);
+	}
+	
+	@PostMapping("/action")//파일 업로드
+	@ResponseBody
+	public ResponseEntity<BoardAttachDTO> upload(MultipartFile uploadfile) {
+		String uploadfolder="C:\\upload"; //업로드 될 폴더
+		String uploadfolderPath=getFolder(); //업로드될 경로
+		File uploadPath =new File(uploadfolder,uploadfolderPath);
+		if(uploadPath.exists()==false) {//오늘 날짜의 폴더 확인
+			uploadPath.mkdirs(); //오늘 날짜의 폴더 생성
+		}
+		BoardAttachDTO attach= new BoardAttachDTO();
+		String uploadFileName=uploadfile.getOriginalFilename();
+		attach.setFilename(uploadFileName);
+		UUID uuid=UUID.randomUUID(); //uuid 생성
+		uploadFileName=uuid.toString()+"_"+uploadfile.getOriginalFilename(); //업로드될 파일 이름
+		try {
+			File saveFile= new File(uploadPath,uploadFileName);
+			uploadfile.transferTo(saveFile); //파일 저장
+			attach.setUploadpath(uploadfolderPath);
+			attach.setUuid(uuid.toString());
+
+			Thumbnails.of(saveFile).size(250,250).toFile(uploadPath+"\\S_"+uploadFileName); // 썸네일 이미지 저장
+			
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(attach,HttpStatus.OK);
+	}
+
+```
+```java
+	//BoardController
+	public void write(BoardDTO dto) { //게시글 작성
+		bm.write(dto);
+		dto.getAttach().setBno(dto.getBno());
+		bm.insert(dto.getAttach());		
+	}
+```
+```java
+	public void insert(BoardAttachDTO dto); //파일업로드
+```
+```xml
+	<!-- 파일업로드 -->
+	<insert id="insert">
+		insert into attach (uuid,uploadpath,filename,bno)
+		values(#{uuid},#{uploadpath},#{filename},#{bno})
+	</insert>
 ```
 ### 글 수정
 ```java
