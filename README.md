@@ -834,27 +834,101 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 ```
 ### 첨부사진 수정
 ```js
+	$("input[type='submit']").on("click",function(e){ /* 글 수정 */
+		var form =$("form")
+		e.preventDefault();
+		
+		if($("#title").val()!="" && $("#content").val()!=""&&$("#material").val()!=null){ /* 빈 값 확인 */
+			if($("#file").val()!=""){
+				$.ajax({ /* 첨부 파일 삭제 */
+					url:"/br/delete"
+					,type:"delete",
+					datatype:"json",
+					contentType:"application/json; charset=utf-8",
+					async:false,
+					data:JSON.stringify({bno:bno}),
+					success:function(){
+						var formdata=new FormData();
+						var file=$("#file")
+						var files=file[0].files;
+						formdata.append("uploadfile",files[0])
+						console.log(formdata);
+						$.ajax({ /* 첨부파일 업로드 */
+							url:"/br/action"
+							,type:"post",
+							datatype:"json",
+							async:false,
+							processData:false,
+							contentType:false,
+							data:formdata,
+							success:function(e){
+								var str="";
+								str+="<input type='hidden' name=attach.filename value='"+e.filename+"'>"
+								str+="<input type='hidden' name=attach.uuid value='"+e.uuid+"'>"
+								str+="<input type='hidden' name=attach.uploadpath value='"+e.uploadpath+"'>"
+								form.append(str).submit();
+							},error:function(){
+							}
+						})
+					},error:function(){
+					}
+				})
+			}
+			form.submit();
+		}
+		e.preventDefault();
+	})
 ```
 ```java
+	@DeleteMapping("/delete") //해당 글의 이미지 삭제
+	public ResponseEntity<String> delete(@RequestBody BoardAttachDTO dto){
+		int result = bs.attdelete(dto);
+		return result>=1 ? new ResponseEntity<>("success",HttpStatus.OK)
+				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR)
+				;
+	}
 ```
 ```java
+	public int attdelete(BoardAttachDTO dto); //해당 글의 이미지 삭제
 ```
 ```java
+	public int attdelete(BoardAttachDTO dto) { //해당 글의 이미지 삭제
+		return bm.attdelete(dto);
+	}
 ```
 ```java
+	public int attdelete(BoardAttachDTO dto); //해당 글의 이미지 삭제
 ```
-```js
+```xml
+	<!-- 해당 글의 이미지 삭제 -->
+	<delete id="attdelete">
+		delete from attach where bno=#{bno};
+	</delete>
 ```
 ### 글 삭제
 ```java
+	@PostMapping("/delete") //글 삭제
+	public String delete(BoardDTO dto) {
+		sv.delete(dto);
+		return "redirect:/";
+	}
 ```
 ```java
+	public void delete(BoardDTO dto); //게시글 삭제
 ```
 ```java
+	public void delete(BoardDTO dto) { //게시글 삭제
+		bm.delete(dto);
+	}
 ```
 ```java
+	public void delete(BoardDTO dto); //게시글 삭제
 ```
 ```xml
+	<!-- 게시글 삭제 -->
+	<delete id="delete">
+		delete from board where bno=#{bno};
+	</delete>
 ```
 ### 추천
 ```java
