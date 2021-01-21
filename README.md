@@ -400,9 +400,111 @@ $(document).ready(function(){
 ### 유효성 검사
 ####
 ```js
+	function idch(){
+		var id=$("#id").val();
+		var tf="";
+		var reg=/^[a-z0-9]{4,20}$/; /* 유효성 검사 */
+		if(id==""){
+			$("#idch").text("필수")
+			$("#idch").css("color","red")
+			tf=false
+		}else{
+			try{
+				$.ajax({
+					url:"/mr/"+encodeURI(id),
+					contentType:"application/json; charset=utf-8",
+					type:"GET",
+					async:false,
+					success:function(result){
+					if(result=="1"){ /* 해당 아이디가 이미 있을시 */
+						$("#idch").text("사용중인 아이디 입니다")				
+						$("#idch").css("color","red")
+						tf=false
+					}else{
+						if(reg.test(id)){ /* 유효성 검사 */
+							$("#idch").text("사용가능한 아이디 입니다")
+							$("#idch").css("color","green")
+							tf=true
+						}else{ /* 유효성 검사 통과x */
+							$("#idch").text("4~20자의 영문 소문자,숫자")				
+							$("#idch").css("color","red")
+							tf=false
+						}
+					}
+					},error:function(){
+					}	
+				})
+			}catch(e){
+			}
+		}
+		return tf		
+	}
+```
+```js
+	function pwch(){
+		var pw=$("#pw").val();
+		var reg=/^(?=.*[0-9])(?=.*[a-z]).{8,30}$/; /* 유효성 검사 */
+		if(reg.test(pw)){ /* 유효성 검사 */
+			$("#pwch").text("사용가능")
+			$("#pwch").css("color","green")
+			return true
+		}else if(pw==""){ /* 빈값일시 */
+			$("#pwch").text("필수")
+			$("#pwch").css("color","red")
+			return false
+		}else{ /* 유효성 검사 통과x */
+			$("#pwch").text("영문 소문자와 숫자를 반드시 조합하여 8~30자")
+			$("#pwch").css("color","red")
+			return false
+		}
+	}	
+			
+```
+```js
+	function namech(){
+		var name=$("#name").val()
+		var reg=/^[가-힣]{2,8}$/ /* 유효성 검사 */
+		
+		if(name==""){
+			$("#namech").text("필수")
+			$("#namech").css("color","red")
+			return false
+		}else if(reg.test(name)){
+			$("#namech").text("확인")
+			$("#namech").css("color","green")
+			return true
+		}else{
+			$("#namech").text("2~8자 한글")
+			$("#namech").css("color","red")
+			return false
+		}
+	}
+
+```
+```js
+	function emch(){
+		var em=$("#email").val();
+		var reg=/([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/ /* 유효성 검사 */
+		if(em==""){
+			$("#emailch").text("필수")
+			$("#emailch").css("color","red")
+			return false;
+		}else if(reg.test(em)){
+			$("#emailch").text("확인")
+			$("#emailch").css("color","green")
+			return true;
+		}else {
+			$("#emailch").text("올바른 이메일 주소")
+			$("#emailch").css("color","red")
+			return false;
+		}
+	}
 ```
 ### 아이디,비밀번호 찾기
-
+```java
+```
+```java
+```
 ### 회원정보수정
 ### 글 작성
 ### 글 수정
