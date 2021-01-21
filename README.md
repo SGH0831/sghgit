@@ -62,6 +62,7 @@
 - [글 수정](#글-수정)
 - [글 삭제](#글-삭제)
 - [추천](#추천)
+- [댓글 목록](#댓글-목록)
 - [댓글 작성](#댓글-작성)
 - [댓글 수정](#댓글-수정)
 - [댓글 삭제](#댓글-삭제)
@@ -629,14 +630,29 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 ```
 ### 회원정보수정
 ```java
+	@PostMapping("/modify") //비밀번호 변경
+	public String modify(MemberDTO dto,HttpSession session) {
+		sv.modify(dto);
+		session.invalidate(); 
+		return"redirect:/member/login";
+	}
 ```
 ```java
+	public void modify(MemberDTO dto); //회원 수정
 ```
 ```java
+	public void modify(MemberDTO dto) { //회원 정보 수정
+		mm.modify(dto);
+	}
 ```
 ```java
+	public void modify(MemberDTO dto); //회원 수정
 ```
 ```xml
+	<!-- 회원 수정 -->
+	<update id="modify">
+		update user set pw=#{pw} where id=#{id}
+	</update>
 ```
 ### 글 작성
 ```java
@@ -682,7 +698,22 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 ```
 ```xml
 ```
+### 댓글 목록
+```js
+```
+```java
+```
+```java
+```
+```java
+```
+```java
+```
+```xml
+```
 ### 댓글 작성
+```js
+```
 ```java
 ```
 ```java
@@ -694,6 +725,8 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 ```xml
 ```
 ### 댓글 수정
+```js
+```
 ```java
 ```
 ```java
