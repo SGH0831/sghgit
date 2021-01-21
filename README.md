@@ -49,13 +49,16 @@
 
 ## 5 기술 상세
 - [홈 화면](#홈-화면) 
+	- [썸네일](#썸네일)
 - [로그인](#로그인)
 - [회원가입](#회원가입)  
 	- [중복확인](#중복확인)
 	- [유효성 검사](#유효성-검사)  
 - [아이디,비밀번호 찾기](#아이디-비밀번호-찾기)
 - [회원정보수정](#회원정보수정)
+- [회원탈퇴](#회원탈퇴)
 - [글 작성](#글-작성)
+	- [첨부사진](#첨부사진)
 - [글 수정](#글-수정)
 - [글 삭제](#글-삭제)
 - [추천](#추천)
@@ -232,6 +235,38 @@ $(document).ready(function(){
 	}	
 })
 ```
+### 썸네일
+```js
+	function img(){ /* 썸네일 */
+	$("#contents .card").each(function(){
+		var bno=$(this).data("bno")
+		var ob=$(this)
+		$.getJSON("/br/"+bno+".json",function(data){
+			var callpath=encodeURIComponent(data.uploadpath+"/S_"+data.uuid+"_"+data.filename)
+			ob.find("img").attr("src","/br/display?filename="+callpath )
+			})
+		})	
+	}
+```
+```java
+	@GetMapping("/display") //이미지 보기
+	@ResponseBody
+	public ResponseEntity<byte[]> getfile(String filename){
+		File file=new File("C:\\upload\\"+filename);		
+		ResponseEntity<byte[]> result=null;
+		try {
+			HttpHeaders header=new HttpHeaders();
+			header.add("Content-Type",Files.probeContentType(file.toPath())); // Cotent-type=파일의 확장자
+			result=new ResponseEntity<>(FileCopyUtils.copyToByteArray(file),header,HttpStatus.OK);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+```
+
+
 
 ### 로그인
 #### MemberController.java
@@ -593,12 +628,82 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</select>
 ```
 ### 회원정보수정
+```java
+```
+```java
+```
+```java
+```
+```java
+```
+```xml
+```
 ### 글 작성
+```java
+```
+```java
+```
+```java
+```
+```java
+```
+```xml
+```
 ### 글 수정
+```java
+```
+```java
+```
+```java
+```
+```java
+```
+```xml
+```
 ### 글 삭제
+```java
+```
+```java
+```
+```java
+```
+```java
+```
+```xml
+```
 ### 추천
+```java
+```
+```java
+```
+```java
+```
+```java
+```
+```xml
+```
 ### 댓글 작성
+```java
+```
+```java
+```
+```java
+```
+```java
+```
+```xml
+```
 ### 댓글 수정
+```java
+```
+```java
+```
+```java
+```
+```java
+```
+```xml
+```
 ### 댓글 삭제
 
 
