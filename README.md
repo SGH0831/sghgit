@@ -238,6 +238,7 @@ $(document).ready(function(){
 })
 ```
 ### 썸네일
+#### main.js
 ```js
 	function img(){ /* 썸네일 */
 	$("#contents .card").each(function(){
@@ -250,6 +251,7 @@ $(document).ready(function(){
 		})	
 	}
 ```
+#### BoardRestController.java
 ```java
 	@GetMapping("/display") //이미지 보기
 	@ResponseBody
@@ -681,18 +683,21 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		return "redirect:/";
 	}
 ```
+#### MemberService.java
 ```java
 	public void delete(MemberDTO dto); //회원 탈퇴
-
 ```
+#### MemberServiceIpml.java
 ```java
 	public void delete(MemberDTO dto) { //회원탈퇴
 		mm.delete(dto);
 	}
 ```
+#### MemberMapper.java
 ```java
 	public void delete(MemberDTO dto); //회원 탈퇴
 ```
+#### MemberMapper.xml
 ```xml
 	<!-- 회원 탈퇴 -->
 	<delete id="delete">
@@ -700,6 +705,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</delete>
 ```
 ### 글 작성
+#### BoardController.java
 ```java
 	@PostMapping("/write") //글 작성 POST
 	public String pwrite(BoardDTO dto) {
@@ -707,9 +713,11 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		return "redirect:/board/detail?bno="+dto.getBno(); //작성한 게시글 보기
 	}
 ```
+#### BoardService.java
 ```java
 	public void write(BoardDTO dto); //게시글 작성
 ```
+#### BoardServiceIpml.java
 ```java
 	//BoardController
 	public void write(BoardDTO dto) { //게시글 작성
@@ -718,9 +726,11 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		bm.insert(dto.getAttach());		
 	}
 ```
+#### BoardMapper.java
 ```java
 	public void write(BoardDTO dto); //게시글 작성
 ```
+#### BoardMapper.xml
 ```xml
 	<!-- BoardController -->
 	<!-- 게시글 작성 -->
@@ -730,6 +740,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</insert>
 ```
 ### 첨부
+#### write.js
 ```js
 	$("input[type='submit']").on("click",function(e){  /* 글쓰기 파일등록 */
 		var form =$("form") /* form */
@@ -760,6 +771,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		e.preventDefault();
 	})
 ```
+#### BoardRestController.java
 ```java
 
 	@Autowired
@@ -802,6 +814,8 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	}
 
 ```
+
+#### BoardServiceIpml.java
 ```java
 	//BoardController
 	public void write(BoardDTO dto) { //게시글 작성
@@ -810,9 +824,11 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		bm.insert(dto.getAttach());		
 	}
 ```
+#### BoardMapper.java
 ```java
 	public void insert(BoardAttachDTO dto); //파일업로드
 ```
+#### BoardMapper.xml
 ```xml
 	<!-- 파일업로드 -->
 	<insert id="insert">
@@ -821,6 +837,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</insert>
 ```
 ### 글 수정
+#### BoardController.java
 ```java
 	@PostMapping("/modify") // 글 수정 POST
 	public String modify2(BoardDTO dto) {
@@ -828,9 +845,11 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		return "redirect:/board/detail?bno="+dto.getBno(); // 수정한 글 보기
 	}
 ```
+#### BoardService.java
 ```java
 	public void modify(BoardDTO dto); //게시글 수정
 ```
+#### BoardServiceIpml.java
 ```java
 	public void modify(BoardDTO dto) { //게시글 수정
 		bm.modify(dto);
@@ -840,9 +859,11 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		}
 	}
 ```
+#### BoardMapper.java
 ```java
 	public void modify(BoardDTO dto); //게시글 수정
 ```
+#### BoardMapper.xml
 ```xml
 	<!-- 게시글 수정 -->
 	<update id="modify">
@@ -850,6 +871,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</update>
 ```
 ### 첨부사진 수정
+#### modify.js
 ```js
 	$("input[type='submit']").on("click",function(e){ /* 글 수정 */
 		var form =$("form")
@@ -896,6 +918,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		e.preventDefault();
 	})
 ```
+#### BoardRestController.java
 ```java
 	@DeleteMapping("/delete") //해당 글의 이미지 삭제
 	public ResponseEntity<String> delete(@RequestBody BoardAttachDTO dto){
@@ -905,17 +928,21 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 				;
 	}
 ```
+#### BoardService.java
 ```java
 	public int attdelete(BoardAttachDTO dto); //해당 글의 이미지 삭제
 ```
+#### BoardServiceIpml.java
 ```java
 	public int attdelete(BoardAttachDTO dto) { //해당 글의 이미지 삭제
 		return bm.attdelete(dto);
 	}
 ```
+#### BoardMapper.java
 ```java
 	public int attdelete(BoardAttachDTO dto); //해당 글의 이미지 삭제
 ```
+#### BoardMapper.xml
 ```xml
 	<!-- 해당 글의 이미지 삭제 -->
 	<delete id="attdelete">
@@ -923,6 +950,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</delete>
 ```
 ### 글 삭제
+#### BoardController.java
 ```java
 	@PostMapping("/delete") //글 삭제
 	public String delete(BoardDTO dto) {
@@ -930,17 +958,21 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		return "redirect:/";
 	}
 ```
+#### BoardService.java
 ```java
 	public void delete(BoardDTO dto); //게시글 삭제
 ```
+#### BoardServiceIpml.java
 ```java
 	public void delete(BoardDTO dto) { //게시글 삭제
 		bm.delete(dto);
 	}
 ```
+#### BoardMapper.java
 ```java
 	public void delete(BoardDTO dto); //게시글 삭제
 ```
+#### BoardMapper.xml
 ```xml
 	<!-- 게시글 삭제 -->
 	<delete id="delete">
@@ -948,6 +980,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</delete>
 ```
 ### 추천
+#### detail.js
 ```js
 	$("#likesbox").on("click",function(){ /* 해당 글 추천 */
 		if(id!=null&&id!=''){
@@ -1010,6 +1043,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		}
 	}
 ```
+#### BoardRestController.java
 ```java
 	@PostMapping("/likes") //해당글의 나의 추천 상태 확인
 	public ResponseEntity<Integer> likes(@RequestBody LikesDTO dto){
@@ -1032,11 +1066,13 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 				;
 	}
 ```
+#### BoardService.java
 ```java
 	public int likes(LikesDTO dto); //해당 글의 나의 추천상태 확인
 	public int likesadd(LikesDTO dto); //추천 추가
 	public int likedel(LikesDTO dto); //추천 취소
 ```
+#### BoardServiceIpml.java
 ```java
 	public int likes(LikesDTO dto) { //해당 글의 나의 추천상태 확인
 		return bm.likes(dto);
@@ -1048,11 +1084,13 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		return bm.likedel(dto);
 	}
 ```
+#### BoardMapper.java
 ```java
 	public int likes(LikesDTO dto); //해당 글의 나의 추천상태 확인
 	public int likesadd(LikesDTO dto); //추천 추가
 	public int likedel(LikesDTO dto); //추천 취소
 ```
+#### BoardMapper.xml
 ```xml
 	<!-- 해당 글의 나의 추천상태 확인 -->
 	<select id="likes" resultType="int">
