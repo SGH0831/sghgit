@@ -10,7 +10,7 @@
 ## 1 기획의도
 
 <img src="https://user-images.githubusercontent.com/77423948/105108845-87b65a80-5afe-11eb-8eeb-1e15fc56dec5.jpg" width="400" >  
-배운것들을 다 활용 할 수 있는 게시판형 사이트를 제작 하였습니다.  
+배운것들을 다 활용 할 수 있는 게시판형 사이트를 제작 하였습니다.		
 그중에서 혼자서도 쉽게 요리 할 수 있도록 서로의 요리 레시피를 공유하는 사이트로 제작하였습니다
 
 ## 2 개발 환경
@@ -74,7 +74,7 @@
 
 ### 홈 화면
 
-#### MainController.java
+**MainController.java**
 ```java
 
 @Controller
@@ -89,14 +89,14 @@ public class MainController {
 		return "main";
 
 ```
-#### BoardService.java
+**BoardService.java**
 ```java
 	//MainController
 	public ArrayList<BoardDTO> getlist(Criteria cri); //게시글 목록
 	public int total(Criteria cri); //게시글 수
 	
 ```
-#### BoardServiceIpml.java
+**BoardServiceIpml.java**
 ```java
 	//MainController
 	public ArrayList<BoardDTO> getlist(Criteria cri) { //게시글 목록
@@ -107,13 +107,13 @@ public class MainController {
 	}
 ```
 
-#### BoardMapper.java
+**BoardMapper.java**
 ```java
 	//MainController
 	public ArrayList<BoardDTO> getlist(Criteria cri); //게시글 목록
 	public int total(Criteria cri); //게시글 수
 ```
-#### BoardMapper.xml
+**BoardMapper.xml**
 ```xml
 <!-- MainController -->	
 	<!-- 게시글 목록  -->
@@ -174,7 +174,7 @@ public class MainController {
 	</select>
 	
 ```
-#### main.js
+**main.js**
 
 ```js
 $(document).ready(function(){
@@ -238,7 +238,7 @@ $(document).ready(function(){
 })
 ```
 ### 썸네일
-#### main.js
+**main.js**
 ```js
 	function img(){ /* 썸네일 */
 	$("#contents .card").each(function(){
@@ -251,7 +251,7 @@ $(document).ready(function(){
 		})	
 	}
 ```
-#### BoardRestController.java
+**BoardRestController.java**
 ```java
 	@GetMapping("/display") //이미지 보기
 	@ResponseBody
@@ -273,7 +273,7 @@ $(document).ready(function(){
 
 
 ### 로그인
-#### MemberController.java
+**MemberController.java**
 ```java
 	@GetMapping("/login") // 로그인 창으로
 	public void login() {
@@ -296,21 +296,21 @@ $(document).ready(function(){
 		return "redirect:/";
 	}
 ```
-#### MemberService.java
+**MemberService.java**
 ```java
 	public MemberDTO login(MemberDTO dto); //로그인 
 ```
-#### MemberServiceIpml.java
+**MemberServiceIpml.java**
 ```java
 	public MemberDTO login(MemberDTO dto) { //로그인
 		return mm.login(dto);
 	}
 ```
-#### MemberMapper.java
+**MemberMapper.java**
 ```java
 	public MemberDTO login(MemberDTO dto); //로그인
 ```
-#### MemberMapper.xml
+**MemberMapper.xml**
 ```xml
  	<!-- 로그인 -->
  	<select id="login" resultType="org.SGH.DTO.MemberDTO">
@@ -320,7 +320,7 @@ $(document).ready(function(){
 
 ### 회원가입
 
-#### MemberController.java
+**MemberController.java**
 ```java
  	@GetMapping("/sign_up") //회원가입 창으로
 	public void signup() {
@@ -332,21 +332,21 @@ $(document).ready(function(){
 		return "redirect:/member/login";
 	}
 ```
-#### MemberService.java
+**MemberService.java**
 ```java
 	public void add(MemberDTO dto); //회원가입
 ```
-#### MemberServiceIpml.java
+**MemberServiceIpml.java**
 ```java
 	public void add(MemberDTO dto) { //회원가입
 		mm.add(dto);
 	}
 ```
-#### MemberMapper.java
+**MemberMapper.java**
 ```java
 	public void add(MemberDTO dto); //회원가입
 ```
-####  MemberMapper.xml
+**MemberMapper.xml**
 ```xml
  	<!-- 회원가입-->
  	<insert id="add">
@@ -355,7 +355,7 @@ $(document).ready(function(){
 ```
 ### 중복확인
 
-#### signup.js 
+**signup.js**
 ```js
 	$("#id").blur(function(){  /* 아이디 확인 */
 		idch();
