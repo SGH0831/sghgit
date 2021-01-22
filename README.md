@@ -931,15 +931,126 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</delete>
 ```
 ### 추천
-```java
+```js
+	$("#likesbox").on("click",function(){ /* 해당 글 추천 */
+		if(id!=null&&id!=''){
+			$.ajax({ /* 해당 글의 나의 추천 상태 확인 */
+				url:"/br/likes",
+				type:"post",
+				contentType:"application/json; charset=utf-8",
+				data:JSON.stringify({bno:bno,id:id}),
+				async:false,
+				success:function(result){
+					if(result==1){ /* 추천 상태 일 경우 */
+						$.ajax({ /* 추천 취소 */
+							url:"/br/likesdel",
+							type:"delete",
+							async:false,
+							contentType:"application/json; charset=utf-8",
+							data:JSON.stringify({bno:bno,id:id}),
+							success:function(){
+								likes()
+							},error:function(){
+							}
+						})
+					}else{ /* 추천 상태가 아닐 경우 */
+						$.ajax({ /* 추천 추가 */
+							url:"/br/likesadd",
+							type:"put",
+							async:false,
+							contentType:"application/json; charset=utf-8",
+							data:JSON.stringify({bno:bno,id:id}),
+							success:function(){
+								likes()
+							},error:function(){
+							}
+						})
+					}
+				},error:function(){
+				}
+			})
+		}else{
+			alert("로그인 필요")
+		}
+	})
+	
+	function likes(){ /* 추천 확인 */
+		if(id!=null&&id!=''){
+			$.ajax({ /* 해당 글의 나의 추천 상태 확인 */
+				url:"/br/likes",
+				type:"post",
+				contentType:"application/json; charset=utf-8",
+				data:JSON.stringify({bno:bno,id:id}),
+				success:function(result){
+					if(result==1){ /* 추천 상태 일 경우 */
+						$("#likesbox").html("추천취소")
+					}else{ /* 추천 상태가 아닐 경우 */
+						$("#likesbox").html("추천")
+					}
+				}
+			})
+		}else{
+		}
+	}
 ```
 ```java
+	@PostMapping("/likes") //해당글의 나의 추천 상태 확인
+	public ResponseEntity<Integer> likes(@RequestBody LikesDTO dto){
+		return new ResponseEntity<>(bs.likes(dto),HttpStatus.OK);
+	}
+	
+	@PutMapping("likesadd") //추천 추가
+	public ResponseEntity<String> likesadd(@RequestBody LikesDTO dto){
+		int result =bs.likesadd(dto);
+		return result ==1 ? new ResponseEntity<>("success",HttpStatus.OK)
+				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR)
+				;
+	}
+	
+	@DeleteMapping("/likesdel") //추천 취소
+	public ResponseEntity<String> likesdel(@RequestBody LikesDTO dto){
+		int result =bs.likedel(dto);
+		return result ==1 ? new ResponseEntity<>("success",HttpStatus.OK)
+				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR)
+				;
+	}
 ```
 ```java
+	public int likes(LikesDTO dto); //해당 글의 나의 추천상태 확인
+	public int likesadd(LikesDTO dto); //추천 추가
+	public int likedel(LikesDTO dto); //추천 취소
 ```
 ```java
+	public int likes(LikesDTO dto) { //해당 글의 나의 추천상태 확인
+		return bm.likes(dto);
+	}
+	public int likesadd(LikesDTO dto) { //추천 추가
+		return bm.likesadd(dto);
+	}
+	public int likedel(LikesDTO dto) { //추천 취소
+		return bm.likedel(dto);
+	}
+```
+```java
+	public int likes(LikesDTO dto); //해당 글의 나의 추천상태 확인
+	public int likesadd(LikesDTO dto); //추천 추가
+	public int likedel(LikesDTO dto); //추천 취소
 ```
 ```xml
+	<!-- 해당 글의 나의 추천상태 확인 -->
+	<select id="likes" resultType="int">
+		select count(*) from likes where id=#{id} and bno=#{bno}
+	</select>
+	
+	<!-- 추천 추가 -->
+	<insert id="likesadd">
+		insert into likes (id,bno) values(#{id},#{bno});
+	</insert>
+	
+	<!-- 추천   -->
+	<delete id="likedel">
+		delete from likes where bno=#{bno} and id=#{id}
+	</delete>
 ```
 ### 댓글 목록
 ```js
