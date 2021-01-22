@@ -435,7 +435,7 @@ $(document).ready(function(){
 ```
 
 ### 유효성 검사
-####
+#### signup.js
 ```js
 	function idch(){
 		var id=$("#id").val();
@@ -477,6 +477,8 @@ $(document).ready(function(){
 		return tf		
 	}
 ```
+
+#### signup.js
 ```js
 	function pwch(){
 		var pw=$("#pw").val();
@@ -497,6 +499,8 @@ $(document).ready(function(){
 	}	
 			
 ```
+
+#### signup.js
 ```js
 	function namech(){
 		var name=$("#name").val()
@@ -518,6 +522,8 @@ $(document).ready(function(){
 	}
 
 ```
+
+#### signup.js
 ```js
 	function emch(){
 		var em=$("#email").val();
@@ -538,6 +544,7 @@ $(document).ready(function(){
 	}
 ```
 ### 아이디,비밀번호 찾기
+#### find_id.js
 ```js
 $(document).ready(function(){
 	
@@ -562,6 +569,7 @@ $(document).ready(function(){
 	})
 })
 ```
+#### find_pw.js
 ```js
 $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		var email=$("#email").val()
@@ -582,7 +590,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		})
 	})
 ```
-
+#### MemberRestController.java
 ```java
 	@PostMapping("/find_id") //아이디 찾기
 	public ResponseEntity<String> findid(@RequestBody MemberDTO dto){
@@ -611,18 +619,21 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		return new ResponseEntity<>("success",HttpStatus.OK);
 	}
 ```
-
+#### MemberService.java
 ```java
 	public MemberDTO find_id(MemberDTO dto); //아이디 찾기
 ```
+#### MemberServiceIpml.java
 ```java
 	public MemberDTO find_id(MemberDTO dto) { //아이디 찾기
 		return mm.find_id(dto);
 	}
 ```
+#### MemberMapper.java
 ```java
 	public MemberDTO find_id(MemberDTO dto); //아이디찾기
 ```
+#### MemberMapper.xml
 ```xml
 	<!-- 아이디 찾기 -->
 	<select id="find_id" resultType="org.SGH.DTO.MemberDTO">
@@ -630,6 +641,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</select>
 ```
 ### 회원 정보 수정
+#### MemberController.java
 ```java
 	@PostMapping("/modify") //비밀번호 변경
 	public String modify(MemberDTO dto,HttpSession session) {
@@ -638,17 +650,21 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		return"redirect:/member/login";
 	}
 ```
+#### MemberService.java
 ```java
 	public void modify(MemberDTO dto); //회원 수정
 ```
+#### MemberServiceIpml.java
 ```java
 	public void modify(MemberDTO dto) { //회원 정보 수정
 		mm.modify(dto);
 	}
 ```
+#### MemberMapper.java
 ```java
 	public void modify(MemberDTO dto); //회원 수정
 ```
+#### MemberMapper.xml
 ```xml
 	<!-- 회원 수정 -->
 	<update id="modify">
@@ -656,6 +672,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</update>
 ```
 ### 회원 탈퇴
+#### MemberController.java
 ```java
 	@PostMapping("/delete") //회원 탈퇴
 	public String delete(MemberDTO dto,HttpSession session) {
