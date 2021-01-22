@@ -732,7 +732,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		(title,content,writer,category,material)values(#{title},#{content},#{writer},#{category},#{material})
 	</insert>
 ```
-### 첨부
+### 첨부사진
 **write.js**
 ```js
 	$("input[type='submit']").on("click",function(e){  /* 글쓰기 파일등록 */
