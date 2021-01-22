@@ -1054,45 +1054,183 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 ```
 ### 댓글 목록
 ```js
+	function replylist(){ /* 댓글 목록 */
+		var str="";
+		$.getJSON("/reply/"+bno+".json",function(data){ /* 댓글 목록 가져오기 */
+			$(data).each(function(){
+				str+="<li class='border' data-rno='"+this.rno+"'><p class='re_writer fw-bold'>"+this.reply_writer+"</p><p class='re_content'>"+this.reply_content+"</p>"
+				if(id==this.reply_writer){
+				str+="<p><button class='remodi btn btn-success'>수정</button>  <button class='redel btn btn-success'>삭제</button></p></li>"
+				}
+			})
+			$("#replies").html(str)
+		})
+	}
 ```
 ```java
+	@GetMapping("/{bno}") //해당글의 댓글 목록
+	public ResponseEntity<ArrayList<replyDTO>> relist(@PathVariable("bno")int bno){
+		return new ResponseEntity<>(sv.list(bno),HttpStatus.OK);
+		
+	}
 ```
 ```java
+	public ArrayList<replyDTO> list(int bno); //댓글 목록
 ```
 ```java
+	public ArrayList<replyDTO> list(int bno) { //댓글 목록
+		return bm.list(bno);
+	}
 ```
 ```java
+	public ArrayList<replyDTO> list(int bno); //댓글 목록
 ```
 ```xml
+	<select id="list" resultType="org.SGH.DTO.replyDTO">
+		select * from reply where bno=#{bno} order by rno desc;
+	</select>
 ```
 ### 댓글 작성
 ```js
+	$("#rebutton").on("click",function(){ /* 댓글 작성 */
+		if(id!=""){ /* 로그인 확인 */
+		var reply_writer =id;
+		var reply_content =$("#replytext").val();
+		$.ajax({ /* 댓글 작성 */
+			url:"/reply/write",
+			type:"post",
+			contentType:"application/json; charset=utf-8",
+			data:JSON.stringify({bno:bno,reply_writer:reply_writer,reply_content:reply_content}),
+			success:function(data){
+				$("#replytext").html("")
+				replylist();
+			},error:function(){
+				alert("에러")
+			}
+		})		
+		}else{
+			alert("로그인필요")
+		}	
+	})
 ```
 ```java
+	@PostMapping("/write") //댓글 작성
+	public ResponseEntity<String> rewrite(@RequestBody replyDTO dto){
+		int result=sv.rewrite(dto);
+		return result ==1 ? new ResponseEntity<>("success",HttpStatus.OK)
+				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 ```
 ```java
+	public int rewrite(replyDTO dto); //댓글 작성
 ```
 ```java
+	public int rewrite(replyDTO dto) { //댓글 작성
+		return bm.rewrite(dto);
+	}
 ```
 ```java
+	public int rewrite(replyDTO dto); //댓글 작성
 ```
 ```xml
+	<!-- 댓글 작성 -->
+	<insert id="rewrite">
+		insert into reply (bno,reply_writer,reply_content)values(#{bno},#{reply_writer},#{reply_content})
+	</insert>
 ```
 ### 댓글 수정
 ```js
+	$("#replies").on("click",".remodi",function(){  /*댓글 수정*/
+		var rno=$(this).parents("li").data("rno")
+		var text=$(this).parent().prev(".re_content").html();
+		$(this).parents("li").replaceWith("<textarea data-rno='"+rno+"' class='modiarea' maxlength='100'>"+text+"</textarea><div><button class='modisub btn btn-success'>확인</button><button class='modican  btn btn-success'>취소</button></div>"); /* textarea로 변환 */
+	})
+		
+	$("#replies").on("click",".modisub",function(){ /* 댓글수정 확인 */
+		var rno=$(this).parent().prev("textarea").data("rno")
+		var reply_content=$(this).parent().prev("textarea").val();
+			$.ajax({  /* 댓글 수정 */
+				url:"/reply/modify",
+				type:"put",
+				contentType:"application/json; charset=utf-8",
+				data:JSON.stringify({rno:rno,reply_content:reply_content}),
+				success:function(){
+					replylist();
+				},error:function(){
+				}
+		})
+	})	
+	$("#replies").on("click",".modican",function(){ /* 댓글수정 취소 */
+		replylist();
+	})	
 ```
 ```java
+	@PutMapping("/modify") //댓글 수정
+	public ResponseEntity<String> modify(@RequestBody replyDTO dto){
+		int result=sv.remodify(dto);
+		return result ==1 ? new ResponseEntity<>("success",HttpStatus.OK)
+				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 ```
 ```java
+	public int remodify(replyDTO dto); //댓글 수정
+
 ```
 ```java
+	public int remodify(replyDTO dto) { //댓글 수정
+		return bm.remodify(dto);
+	}
 ```
 ```java
+	public int remodify(replyDTO dto); //댓글 수정
 ```
 ```xml
+	<!-- 댓글 수정 -->
+	<update id="remodify">
+		update reply set reply_content=#{reply_content} where rno=#{rno}
+	</update>
 ```
 ### 댓글 삭제
-
+```js
+	$("#replies").on("click",".redel",function(){ /* 댓글 삭제 */
+		var rno=$(this).parents("li").data("rno")
+		$.ajax({ 
+				url:"/reply/delete",
+				type:"delete",
+				contentType:"application/json; charset=utf-8",
+				data:JSON.stringify({rno:rno}),
+				success:function(){
+					replylist();
+				},error:function(){
+				}
+		})
+	})
+```
+```java
+	@DeleteMapping("/delete") //댓글 삭제
+	public ResponseEntity<String> delete(@RequestBody replyDTO dto){
+		int result=sv.redelete(dto);
+		return result ==1 ? new ResponseEntity<>("success",HttpStatus.OK)
+				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+```
+```java
+	public int redelete(replyDTO dto); //댓글 삭제
+```
+```java
+	public int redelete(replyDTO dto) { //댓글 삭제
+		return bm.redelete(dto);
+	}
+```
+```java
+	public int redelete(replyDTO dto); //댓글 삭제
+```
+```xml
+	<!-- 댓글 삭제 -->
+	<delete id="redelete">
+		delete from reply where rno=#{rno}	
+	</delete>
+```
 
 
 
