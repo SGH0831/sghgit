@@ -1108,6 +1108,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</delete>
 ```
 ### 댓글 목록
+#### detail.js
 ```js
 	function replylist(){ /* 댓글 목록 */
 		var str="";
@@ -1122,6 +1123,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		})
 	}
 ```
+#### ReplyController.java
 ```java
 	@GetMapping("/{bno}") //해당글의 댓글 목록
 	public ResponseEntity<ArrayList<replyDTO>> relist(@PathVariable("bno")int bno){
@@ -1129,23 +1131,28 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		
 	}
 ```
+#### BoardService.java
 ```java
 	public ArrayList<replyDTO> list(int bno); //댓글 목록
 ```
+#### BoardServiceIpml.java
 ```java
 	public ArrayList<replyDTO> list(int bno) { //댓글 목록
 		return bm.list(bno);
 	}
 ```
+#### BoardMapper.java
 ```java
 	public ArrayList<replyDTO> list(int bno); //댓글 목록
 ```
+#### BoardMapper.xml
 ```xml
 	<select id="list" resultType="org.SGH.DTO.replyDTO">
 		select * from reply where bno=#{bno} order by rno desc;
 	</select>
 ```
 ### 댓글 작성
+#### detail.js
 ```js
 	$("#rebutton").on("click",function(){ /* 댓글 작성 */
 		if(id!=""){ /* 로그인 확인 */
@@ -1168,6 +1175,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		}	
 	})
 ```
+#### ReplyController.java
 ```java
 	@PostMapping("/write") //댓글 작성
 	public ResponseEntity<String> rewrite(@RequestBody replyDTO dto){
@@ -1176,17 +1184,21 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 ```
+#### BoardService.java
 ```java
 	public int rewrite(replyDTO dto); //댓글 작성
 ```
+#### BoardServiceIpml.java
 ```java
 	public int rewrite(replyDTO dto) { //댓글 작성
 		return bm.rewrite(dto);
 	}
 ```
+#### BoardMapper.java
 ```java
 	public int rewrite(replyDTO dto); //댓글 작성
 ```
+#### BoardMapper.xml
 ```xml
 	<!-- 댓글 작성 -->
 	<insert id="rewrite">
@@ -1194,6 +1206,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</insert>
 ```
 ### 댓글 수정
+#### detail.js
 ```js
 	$("#replies").on("click",".remodi",function(){  /*댓글 수정*/
 		var rno=$(this).parents("li").data("rno")
@@ -1219,6 +1232,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		replylist();
 	})	
 ```
+#### ReplyController.java
 ```java
 	@PutMapping("/modify") //댓글 수정
 	public ResponseEntity<String> modify(@RequestBody replyDTO dto){
@@ -1227,18 +1241,22 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 ```
+#### BoardService.java
 ```java
 	public int remodify(replyDTO dto); //댓글 수정
 
 ```
+#### BoardServiceIpml.java
 ```java
 	public int remodify(replyDTO dto) { //댓글 수정
 		return bm.remodify(dto);
 	}
 ```
+#### BoardMapper.java
 ```java
 	public int remodify(replyDTO dto); //댓글 수정
 ```
+#### BoardMapper.xml
 ```xml
 	<!-- 댓글 수정 -->
 	<update id="remodify">
@@ -1246,6 +1264,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</update>
 ```
 ### 댓글 삭제
+#### detail.js
 ```js
 	$("#replies").on("click",".redel",function(){ /* 댓글 삭제 */
 		var rno=$(this).parents("li").data("rno")
@@ -1261,6 +1280,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		})
 	})
 ```
+#### ReplyController.java
 ```java
 	@DeleteMapping("/delete") //댓글 삭제
 	public ResponseEntity<String> delete(@RequestBody replyDTO dto){
@@ -1269,17 +1289,21 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 ```
+#### BoardService.java
 ```java
 	public int redelete(replyDTO dto); //댓글 삭제
 ```
+#### BoardServiceIpml.java
 ```java
 	public int redelete(replyDTO dto) { //댓글 삭제
 		return bm.redelete(dto);
 	}
 ```
+#### BoardMapper.java
 ```java
 	public int redelete(replyDTO dto); //댓글 삭제
 ```
+#### BoardMapper.xml
 ```xml
 	<!-- 댓글 삭제 -->
 	<delete id="redelete">
