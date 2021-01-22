@@ -401,8 +401,7 @@ $(document).ready(function(){
 		return tf		
 	}
 ```
-
-#### MemberRestController.java
+**MemberRestController.java**
 ```java
 	@RequestMapping(value="/{id}",method = RequestMethod.GET) //아이디 중복 확인 
 	public int signcheck(@PathVariable("id")String id){
@@ -410,25 +409,21 @@ $(document).ready(function(){
 		return result;
 	}
 ```
-
-#### MemberService.java
+**MemberService.java**
 ```java
 	public int idch(String id); //아이디 중복 확인
 ```
-
-#### MemberServiceIpml.java
+**MemberServiceIpml.java**
 ```java
 	public int idch(String id) { //아이디 중복 확인
 		return mm.idch(id);
 	}
 ```
-
-#### MemberMapper.java
+**MemberMapper.java**
 ```java
 	public int idch(String id); //아이디 중복 확인
 ```
-
-#### MemberMapper.xml
+**MemberMapper.xml**
 ```xml
  	<!-- 아이디 중복확인 -->
 	<select id="idch" resultType="int">
@@ -437,7 +432,7 @@ $(document).ready(function(){
 ```
 
 ### 유효성 검사
-#### signup.js
+**signup.js**
 ```js
 	function idch(){
 		var id=$("#id").val();
@@ -479,8 +474,7 @@ $(document).ready(function(){
 		return tf		
 	}
 ```
-
-#### signup.js
+**signup.js**
 ```js
 	function pwch(){
 		var pw=$("#pw").val();
@@ -501,8 +495,7 @@ $(document).ready(function(){
 	}	
 			
 ```
-
-#### signup.js
+**signup.js**
 ```js
 	function namech(){
 		var name=$("#name").val()
@@ -524,8 +517,7 @@ $(document).ready(function(){
 	}
 
 ```
-
-#### signup.js
+**signup.js**
 ```js
 	function emch(){
 		var em=$("#email").val();
@@ -546,7 +538,7 @@ $(document).ready(function(){
 	}
 ```
 ### 아이디,비밀번호 찾기
-#### find_id.js
+**find_id.js**
 ```js
 $(document).ready(function(){
 	
@@ -571,7 +563,7 @@ $(document).ready(function(){
 	})
 })
 ```
-#### find_pw.js
+**find_pw.js**
 ```js
 $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		var email=$("#email").val()
@@ -592,7 +584,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		})
 	})
 ```
-#### MemberRestController.java
+**MemberRestController.java**
 ```java
 	@PostMapping("/find_id") //아이디 찾기
 	public ResponseEntity<String> findid(@RequestBody MemberDTO dto){
@@ -621,21 +613,21 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		return new ResponseEntity<>("success",HttpStatus.OK);
 	}
 ```
-#### MemberService.java
+**MemberService.java**
 ```java
 	public MemberDTO find_id(MemberDTO dto); //아이디 찾기
 ```
-#### MemberServiceIpml.java
+**MemberServiceIpml.java**
 ```java
 	public MemberDTO find_id(MemberDTO dto) { //아이디 찾기
 		return mm.find_id(dto);
 	}
 ```
-#### MemberMapper.java
+**MemberMapper.java**
 ```java
 	public MemberDTO find_id(MemberDTO dto); //아이디찾기
 ```
-#### MemberMapper.xml
+**MemberMapper.xml**
 ```xml
 	<!-- 아이디 찾기 -->
 	<select id="find_id" resultType="org.SGH.DTO.MemberDTO">
@@ -643,7 +635,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</select>
 ```
 ### 회원 정보 수정
-#### MemberController.java
+**MemberController.java**
 ```java
 	@PostMapping("/modify") //비밀번호 변경
 	public String modify(MemberDTO dto,HttpSession session) {
@@ -652,21 +644,21 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		return"redirect:/member/login";
 	}
 ```
-#### MemberService.java
+**MemberService.java**
 ```java
 	public void modify(MemberDTO dto); //회원 수정
 ```
-#### MemberServiceIpml.java
+**MemberServiceIpml.java**
 ```java
 	public void modify(MemberDTO dto) { //회원 정보 수정
 		mm.modify(dto);
 	}
 ```
-#### MemberMapper.java
+**MemberMapper.java**
 ```java
 	public void modify(MemberDTO dto); //회원 수정
 ```
-#### MemberMapper.xml
+**MemberMapper.xml**
 ```xml
 	<!-- 회원 수정 -->
 	<update id="modify">
@@ -674,7 +666,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</update>
 ```
 ### 회원 탈퇴
-#### MemberController.java
+**MemberController.java**
 ```java
 	@PostMapping("/delete") //회원 탈퇴
 	public String delete(MemberDTO dto,HttpSession session) {
@@ -683,21 +675,21 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		return "redirect:/";
 	}
 ```
-#### MemberService.java
+**MemberService.java**
 ```java
 	public void delete(MemberDTO dto); //회원 탈퇴
 ```
-#### MemberServiceIpml.java
+**MemberServiceIpml.java**
 ```java
 	public void delete(MemberDTO dto) { //회원탈퇴
 		mm.delete(dto);
 	}
 ```
-#### MemberMapper.java
+**MemberMapper.java**
 ```java
 	public void delete(MemberDTO dto); //회원 탈퇴
 ```
-#### MemberMapper.xml
+**MemberMapper.xml**
 ```xml
 	<!-- 회원 탈퇴 -->
 	<delete id="delete">
@@ -705,7 +697,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</delete>
 ```
 ### 글 작성
-#### BoardController.java
+**BoardController.java**
 ```java
 	@PostMapping("/write") //글 작성 POST
 	public String pwrite(BoardDTO dto) {
@@ -713,11 +705,11 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		return "redirect:/board/detail?bno="+dto.getBno(); //작성한 게시글 보기
 	}
 ```
-#### BoardService.java
+**BoardService.java**
 ```java
 	public void write(BoardDTO dto); //게시글 작성
 ```
-#### BoardServiceIpml.java
+**BoardServiceIpml.java**
 ```java
 	//BoardController
 	public void write(BoardDTO dto) { //게시글 작성
@@ -726,11 +718,11 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		bm.insert(dto.getAttach());		
 	}
 ```
-#### BoardMapper.java
+**BoardMapper.java**
 ```java
 	public void write(BoardDTO dto); //게시글 작성
 ```
-#### BoardMapper.xml
+**BoardMapper.xml**
 ```xml
 	<!-- BoardController -->
 	<!-- 게시글 작성 -->
@@ -740,7 +732,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</insert>
 ```
 ### 첨부
-#### write.js
+**write.js**
 ```js
 	$("input[type='submit']").on("click",function(e){  /* 글쓰기 파일등록 */
 		var form =$("form") /* form */
@@ -771,7 +763,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		e.preventDefault();
 	})
 ```
-#### BoardRestController.java
+**BoardRestController.java**
 ```java
 
 	@Autowired
@@ -814,8 +806,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	}
 
 ```
-
-#### BoardServiceIpml.java
+**BoardServiceIpml.java**
 ```java
 	//BoardController
 	public void write(BoardDTO dto) { //게시글 작성
@@ -824,11 +815,11 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		bm.insert(dto.getAttach());		
 	}
 ```
-#### BoardMapper.java
+**BoardMapper.java**
 ```java
 	public void insert(BoardAttachDTO dto); //파일업로드
 ```
-#### BoardMapper.xml
+**BoardMapper.xml**
 ```xml
 	<!-- 파일업로드 -->
 	<insert id="insert">
@@ -837,7 +828,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</insert>
 ```
 ### 글 수정
-#### BoardController.java
+**BoardController.java**
 ```java
 	@PostMapping("/modify") // 글 수정 POST
 	public String modify2(BoardDTO dto) {
@@ -845,11 +836,11 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		return "redirect:/board/detail?bno="+dto.getBno(); // 수정한 글 보기
 	}
 ```
-#### BoardService.java
+**BoardService.java**
 ```java
 	public void modify(BoardDTO dto); //게시글 수정
 ```
-#### BoardServiceIpml.java
+**BoardServiceIpml.java**
 ```java
 	public void modify(BoardDTO dto) { //게시글 수정
 		bm.modify(dto);
@@ -859,11 +850,11 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		}
 	}
 ```
-#### BoardMapper.java
+**BoardMapper.java**
 ```java
 	public void modify(BoardDTO dto); //게시글 수정
 ```
-#### BoardMapper.xml
+**BoardMapper.xml**
 ```xml
 	<!-- 게시글 수정 -->
 	<update id="modify">
@@ -871,7 +862,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</update>
 ```
 ### 첨부사진 수정
-#### modify.js
+**modify.js**
 ```js
 	$("input[type='submit']").on("click",function(e){ /* 글 수정 */
 		var form =$("form")
@@ -918,7 +909,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		e.preventDefault();
 	})
 ```
-#### BoardRestController.java
+**BoardRestController.java**
 ```java
 	@DeleteMapping("/delete") //해당 글의 이미지 삭제
 	public ResponseEntity<String> delete(@RequestBody BoardAttachDTO dto){
@@ -928,21 +919,21 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 				;
 	}
 ```
-#### BoardService.java
+**BoardService.java**
 ```java
 	public int attdelete(BoardAttachDTO dto); //해당 글의 이미지 삭제
 ```
-#### BoardServiceIpml.java
+**BoardServiceIpml.java**
 ```java
 	public int attdelete(BoardAttachDTO dto) { //해당 글의 이미지 삭제
 		return bm.attdelete(dto);
 	}
 ```
-#### BoardMapper.java
+**BoardMapper.java**
 ```java
 	public int attdelete(BoardAttachDTO dto); //해당 글의 이미지 삭제
 ```
-#### BoardMapper.xml
+**BoardMapper.xml**
 ```xml
 	<!-- 해당 글의 이미지 삭제 -->
 	<delete id="attdelete">
@@ -950,7 +941,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</delete>
 ```
 ### 글 삭제
-#### BoardController.java
+**BoardController.java**
 ```java
 	@PostMapping("/delete") //글 삭제
 	public String delete(BoardDTO dto) {
@@ -958,21 +949,21 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		return "redirect:/";
 	}
 ```
-#### BoardService.java
+**BoardService.java**
 ```java
 	public void delete(BoardDTO dto); //게시글 삭제
 ```
-#### BoardServiceIpml.java
+**BoardServiceIpml.java**
 ```java
 	public void delete(BoardDTO dto) { //게시글 삭제
 		bm.delete(dto);
 	}
 ```
-#### BoardMapper.java
+**BoardMapper.java**
 ```java
 	public void delete(BoardDTO dto); //게시글 삭제
 ```
-#### BoardMapper.xml
+**BoardMapper.xml**
 ```xml
 	<!-- 게시글 삭제 -->
 	<delete id="delete">
@@ -980,7 +971,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</delete>
 ```
 ### 추천
-#### detail.js
+**detail.js**
 ```js
 	$("#likesbox").on("click",function(){ /* 해당 글 추천 */
 		if(id!=null&&id!=''){
@@ -1043,7 +1034,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		}
 	}
 ```
-#### BoardRestController.java
+**BoardRestController.java**
 ```java
 	@PostMapping("/likes") //해당글의 나의 추천 상태 확인
 	public ResponseEntity<Integer> likes(@RequestBody LikesDTO dto){
@@ -1066,13 +1057,13 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 				;
 	}
 ```
-#### BoardService.java
+**BoardService.java**
 ```java
 	public int likes(LikesDTO dto); //해당 글의 나의 추천상태 확인
 	public int likesadd(LikesDTO dto); //추천 추가
 	public int likedel(LikesDTO dto); //추천 취소
 ```
-#### BoardServiceIpml.java
+**BoardServiceIpml.java**
 ```java
 	public int likes(LikesDTO dto) { //해당 글의 나의 추천상태 확인
 		return bm.likes(dto);
@@ -1084,13 +1075,13 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		return bm.likedel(dto);
 	}
 ```
-#### BoardMapper.java
+**BoardMapper.java**
 ```java
 	public int likes(LikesDTO dto); //해당 글의 나의 추천상태 확인
 	public int likesadd(LikesDTO dto); //추천 추가
 	public int likedel(LikesDTO dto); //추천 취소
 ```
-#### BoardMapper.xml
+**BoardMapper.xml**
 ```xml
 	<!-- 해당 글의 나의 추천상태 확인 -->
 	<select id="likes" resultType="int">
@@ -1108,7 +1099,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</delete>
 ```
 ### 댓글 목록
-#### detail.js
+**detail.js**
 ```js
 	function replylist(){ /* 댓글 목록 */
 		var str="";
@@ -1123,7 +1114,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		})
 	}
 ```
-#### ReplyController.java
+**ReplyController.java**
 ```java
 	@GetMapping("/{bno}") //해당글의 댓글 목록
 	public ResponseEntity<ArrayList<replyDTO>> relist(@PathVariable("bno")int bno){
@@ -1131,28 +1122,28 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		
 	}
 ```
-#### BoardService.java
+**BoardService.java**
 ```java
 	public ArrayList<replyDTO> list(int bno); //댓글 목록
 ```
-#### BoardServiceIpml.java
+**BoardServiceIpml.java**
 ```java
 	public ArrayList<replyDTO> list(int bno) { //댓글 목록
 		return bm.list(bno);
 	}
 ```
-#### BoardMapper.java
+**BoardMapper.java**
 ```java
 	public ArrayList<replyDTO> list(int bno); //댓글 목록
 ```
-#### BoardMapper.xml
+**BoardMapper.xml**
 ```xml
 	<select id="list" resultType="org.SGH.DTO.replyDTO">
 		select * from reply where bno=#{bno} order by rno desc;
 	</select>
 ```
 ### 댓글 작성
-#### detail.js
+**detail.js**
 ```js
 	$("#rebutton").on("click",function(){ /* 댓글 작성 */
 		if(id!=""){ /* 로그인 확인 */
@@ -1175,7 +1166,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		}	
 	})
 ```
-#### ReplyController.java
+**ReplyController.java**
 ```java
 	@PostMapping("/write") //댓글 작성
 	public ResponseEntity<String> rewrite(@RequestBody replyDTO dto){
@@ -1184,21 +1175,21 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 ```
-#### BoardService.java
+**BoardService.java**
 ```java
 	public int rewrite(replyDTO dto); //댓글 작성
 ```
-#### BoardServiceIpml.java
+**BoardServiceIpml.java**
 ```java
 	public int rewrite(replyDTO dto) { //댓글 작성
 		return bm.rewrite(dto);
 	}
 ```
-#### BoardMapper.java
+**BoardMapper.java**
 ```java
 	public int rewrite(replyDTO dto); //댓글 작성
 ```
-#### BoardMapper.xml
+**BoardMapper.xml**
 ```xml
 	<!-- 댓글 작성 -->
 	<insert id="rewrite">
@@ -1206,7 +1197,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</insert>
 ```
 ### 댓글 수정
-#### detail.js
+**detail.js**
 ```js
 	$("#replies").on("click",".remodi",function(){  /*댓글 수정*/
 		var rno=$(this).parents("li").data("rno")
@@ -1232,7 +1223,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		replylist();
 	})	
 ```
-#### ReplyController.java
+**ReplyController.java**
 ```java
 	@PutMapping("/modify") //댓글 수정
 	public ResponseEntity<String> modify(@RequestBody replyDTO dto){
@@ -1241,22 +1232,22 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 ```
-#### BoardService.java
+**BoardService.java**
 ```java
 	public int remodify(replyDTO dto); //댓글 수정
 
 ```
-#### BoardServiceIpml.java
+**BoardServiceIpml.java**
 ```java
 	public int remodify(replyDTO dto) { //댓글 수정
 		return bm.remodify(dto);
 	}
 ```
-#### BoardMapper.java
+**BoardMapper.java**
 ```java
 	public int remodify(replyDTO dto); //댓글 수정
 ```
-#### BoardMapper.xml
+**BoardMapper.xml**
 ```xml
 	<!-- 댓글 수정 -->
 	<update id="remodify">
@@ -1264,7 +1255,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 	</update>
 ```
 ### 댓글 삭제
-#### detail.js
+**detail.js**
 ```js
 	$("#replies").on("click",".redel",function(){ /* 댓글 삭제 */
 		var rno=$(this).parents("li").data("rno")
@@ -1280,7 +1271,7 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 		})
 	})
 ```
-#### ReplyController.java
+**ReplyController.java**
 ```java
 	@DeleteMapping("/delete") //댓글 삭제
 	public ResponseEntity<String> delete(@RequestBody replyDTO dto){
@@ -1289,21 +1280,21 @@ $("#submit").on("click",function(){ /*비밀번호 이메일전송*/
 				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 ```
-#### BoardService.java
+**BoardService.java**
 ```java
 	public int redelete(replyDTO dto); //댓글 삭제
 ```
-#### BoardServiceIpml.java
+**BoardServiceIpml.java**
 ```java
 	public int redelete(replyDTO dto) { //댓글 삭제
 		return bm.redelete(dto);
 	}
 ```
-#### BoardMapper.java
+**BoardMapper.java**
 ```java
 	public int redelete(replyDTO dto); //댓글 삭제
 ```
-#### BoardMapper.xml
+**BoardMapper.xml**
 ```xml
 	<!-- 댓글 삭제 -->
 	<delete id="redelete">
